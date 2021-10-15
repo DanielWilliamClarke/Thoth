@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/dry.png"/>
+<p>
+
 # Thoth
 Aspectjs Contextual Logging POC
 
