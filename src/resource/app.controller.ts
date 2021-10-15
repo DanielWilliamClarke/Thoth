@@ -5,7 +5,7 @@ import {AppService} from './app.service';
 import '../infrastructure/logger.aspect';
 import {Advised} from 'aspect.js';
 
-@Advised({setHeaders: true})
+@Advised()
 @Injectable()
 export class AppControllerImpl {
   constructor(private readonly appService: AppService) {}
