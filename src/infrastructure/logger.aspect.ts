@@ -1,25 +1,37 @@
-import {beforeMethod, Metadata} from 'aspect.js';
+import {afterMethod, beforeMethod, Metadata} from 'aspect.js';
 import {Logger} from '@nestjs/common';
+import {MethodSelector} from 'aspect.js/src/join_points';
 
 export class AspectLogger {
+  private static readonly pattern: MethodSelector = {
+    classNamePattern: /.*/,
+    methodNamePattern: /.*/,
+  };
+
   private static instance: Logger;
   private getInstance(): Logger {
     if (!AspectLogger.instance) {
-      console.log('Constructing logger');
       AspectLogger.instance = new Logger(AspectLogger.name);
+      AspectLogger.instance.log('Constructing logger');
     }
     return AspectLogger.instance;
   }
 
-  @beforeMethod({
-    classNamePattern: /.*/,
-    methodNamePattern: /.*/,
-  })
-  invokeBeforeMethod(meta: Metadata) {
+  @beforeMethod(AspectLogger.pattern)
+  before(meta: Metadata) {
     this.getInstance().log(
-      `Inside of the logger. Called ${meta.className}.${
-        meta.method.name
-      } with args: ${JSON.stringify(meta.method.args)}.`
+      `Entering ${meta.className}.${meta.method.name} | args: ${JSON.stringify(
+        meta.method.args
+      )}`
+    );
+  }
+
+  @afterMethod(AspectLogger.pattern)
+  after(meta: Metadata) {
+    this.getInstance().log(
+      `Exiting ${meta.className}.${meta.method.name} | result: ${JSON.stringify(
+        meta.method.result
+      )}`
     );
   }
 }
