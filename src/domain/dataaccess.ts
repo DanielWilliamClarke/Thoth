@@ -1,5 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {Advised} from 'aspect.js';
+import {Logger} from '@nestjs/common';
 
 export type ReturnPayload = {
   [K: string]: string;
@@ -8,8 +9,10 @@ export type ReturnPayload = {
 @Injectable()
 @Advised()
 export class DataAccess {
+  constructor(private readonly logger: Logger) {}
+
   Get(data: string, attributes: Record<string, string>): ReturnPayload {
-    console.log(`Using ${data} to make a query`);
+    this.logger.log(`Using ${data} to make a query`);
     return {
       some: 'useful',
       data: 'which',

@@ -74,7 +74,7 @@ if no X-Request-Id is provided this service will generate one to be available in
     "level": 30,
     "time": 1634559138326,
     "pid": 28652,
-    "hostname": "SLB-4PWL4Y2",
+    "hostname": "hostname",
     "req": {
         "id": "52bfec56-d823-42c7-8d40-5855361771db", // <- x-request-id generated
         "method": "GET",
@@ -99,7 +99,7 @@ if no X-Request-Id is provided this service will generate one to be available in
     "level": 30,
     "time": 1634559138327,
     "pid": 28652,
-    "hostname": "SLB-4PWL4Y2",
+    "hostname": "hostname",
     "req": {
         "id": "52bfec56-d823-42c7-8d40-5855361771db",
         "method": "GET",
@@ -124,7 +124,7 @@ if no X-Request-Id is provided this service will generate one to be available in
     "level": 30,
     "time": 1634559138327,
     "pid": 28652,
-    "hostname": "SLB-4PWL4Y2",
+    "hostname": "hostname",
     "req": {
         "id": "52bfec56-d823-42c7-8d40-5855361771db",
         "method": "GET",
@@ -149,7 +149,7 @@ if no X-Request-Id is provided this service will generate one to be available in
     "level": 30,
     "time": 1634559138328,
     "pid": 28652,
-    "hostname": "SLB-4PWL4Y2",
+    "hostname": "hostname",
     "req": {
         "id": "52bfec56-d823-42c7-8d40-5855361771db",
         "method": "GET",
@@ -170,12 +170,35 @@ if no X-Request-Id is provided this service will generate one to be available in
     "context": "AspectLogger",
     "msg": "Inside of the logger. Called DataAccess.Get with args: [\"Complex query string\",{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}]."
 }
-Using Complex query string to make a query
+{
+    "level": 30,
+    "time": 1634560427303,
+    "pid": 28652,
+    "hostname": "hostname",
+    "req": {
+        "id": "52bfec56-d823-42c7-8d40-5855361771db",
+        "method": "GET",
+        "url": "/api/command",
+        "query": {},
+        "params": {
+            "0": "api/command"
+        },
+        "headers": {
+            "host": "localhost:3000",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*",
+            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 60947
+    },
+    "msg": "Using Complex query string to make a query"
+}
 {
     "level": 30,
     "time": 1634559138334,
     "pid": 28652,
-    "hostname": "SLB-4PWL4Y2",
+    "hostname": "hostname",
     "req": {
         "id": "52bfec56-d823-42c7-8d40-5855361771db",
         "method": "GET",
