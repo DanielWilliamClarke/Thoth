@@ -3,23 +3,26 @@
 <p>
 
 # Thoth
+
 Aspectjs Contextual Logging POC
 
----
 - [Thoth](#thoth)
-  - [- Expected logs for api/command endpoint](#--expected-logs-for-apicommand-endpoint)
-  - [## References](#-references)
-  - [## Commands](#-commands)
-  - [## Expected logs for api/command endpoint](#-expected-logs-for-apicommand-endpoint)
----
+  - [References](#references)
+  - [Commands](#commands)
+  - [Expected logs for api/command endpoint](#expected-logs-for-apicommand-endpoint)
+
 ## References
+
 ---
+
 - NestJS Pino - Platform agnostic logger for NestJS based on Pino with REQUEST CONTEXT IN EVERY LOG - <https://github.com/iamolegga/nestjs-pino>
 - AspectJS - Library for aspect-oriented programming with JavaScript, which takes advantage of ECMAScript 2016 decorators syntax - <https://github.com/mgechev/aspect.js>
 - express-request-id - Generate UUID for request and add it to X-Request-Id header. In case request contains X-Request-Id header, uses its value instead - <https://www.npmjs.com/package/express-request-id>
 
 ## Commands
+
 ---
+
 ```TypeScript
 // Setup
 npm install
@@ -47,9 +50,10 @@ curl -H "X-Request-Id: your-x-request-id" localhost:3000/api/command
 
 if no X-Request-Id is provided this service will generate one to be available in the response headers (see below for details)
 
-
 ## Expected logs for api/command endpoint
+
 ---
+
 ```JSON
 // curl localhost:3000/api/command
 {
