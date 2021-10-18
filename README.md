@@ -38,7 +38,27 @@ Once the service is running you can make requests to it with curl
 
 ```Bash
 curl -v -H "X-Request-Id: your-x-request-id" localhost:3000/api/
-// Hello World!
+# *   Trying 127.0.0.1:3000...
+# * TCP_NODELAY set
+# * Connected to localhost (127.0.0.1) port 3000 (#0)
+# > GET /api HTTP/1.1
+# > Host: localhost:3000
+# > User-Agent: curl/7.67.0
+# > Accept: */*
+# > X-Request-Id: your-x-request-id
+# >
+# * Mark bundle as not supporting multiuse
+# < HTTP/1.1 200 OK
+# < X-Powered-By: Express
+# < X-Request-Id: your-x-request-id
+# < Content-Type: text/html; charset=utf-8
+# < Content-Length: 12
+# < ETag: W/"c-Lve95gjOVATpfV8EL5X4nxwjKHE"
+# < Date: Mon, 18 Oct 2021 12:26:36 GMT
+# < Connection: keep-alive
+# < Keep-Alive: timeout=5
+# <
+# Hello World!* Connection #0 to host localhost left intact
 
 curl -H "X-Request-Id: your-x-request-id" localhost:3000/api/command
 //{"some":"useful","data":"which","we":"need","something":"that","I":"need","To":"Find"}
