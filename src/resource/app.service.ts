@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {Advised} from 'aspect.js';
-import {Command, ReturnPayload} from 'src/domain';
+import {Command, ReturnPayload} from '../domain';
 
 @Injectable()
 @Advised()
