@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/DanielWilliamClarke/Thoth#readme",
   "dependencies": {
+    "@binxhealth/pino-stackdriver": "^3.0.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
