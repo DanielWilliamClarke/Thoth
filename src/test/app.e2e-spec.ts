@@ -36,5 +36,9 @@ describe('AppController (e2e)', () => {
           To: 'Find',
         });
     });
+
+    it('/api/throw', () => {
+      return request(app.getHttpServer()).get('/api/throw').expect(200);
+    });
   });
 });
