@@ -72,11 +72,11 @@ if no X-Request-Id is provided this service will generate one to be available in
 // curl localhost:3000/api/command
 {
     "level": 30,
-    "time": 1634559138326,
-    "pid": 28652,
-    "hostname": "hostname",
+    "time": "2021-10-18T14:41:51.855Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
     "req": {
-        "id": "52bfec56-d823-42c7-8d40-5855361771db", // <- x-request-id generated
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95", // <- X-Request-Id generated
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -86,22 +86,22 @@ if no X-Request-Id is provided this service will generate one to be available in
         "headers": {
             "host": "localhost:3000",
             "user-agent": "curl/7.67.0",
-            "accept": "*/*",
-            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db"
+            "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 60947
+        "remotePort": 53254
     },
     "context": "AspectLogger",
-    "msg": "Inside of the logger. Called AppService.runCommand with args: []."
+    "msg": "Constructing logger",
+    "severity": "INFO"
 }
 {
     "level": 30,
-    "time": 1634559138327,
-    "pid": 28652,
-    "hostname": "hostname",
+    "time": "2021-10-18T14:41:51.856Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
     "req": {
-        "id": "52bfec56-d823-42c7-8d40-5855361771db",
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -111,22 +111,22 @@ if no X-Request-Id is provided this service will generate one to be available in
         "headers": {
             "host": "localhost:3000",
             "user-agent": "curl/7.67.0",
-            "accept": "*/*",
-            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db"
+            "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 60947
+        "remotePort": 53254
     },
     "context": "AspectLogger",
-    "msg": "Inside of the logger. Called Command.DoThing with args: [{\"data\":\"Complex query string\",\"attributes\":{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}}]."
+    "msg": "Entering AppService.runCommand | args: []",
+    "severity": "INFO"
 }
 {
     "level": 30,
-    "time": 1634559138327,
-    "pid": 28652,
-    "hostname": "hostname",
+    "time": "2021-10-18T14:41:51.857Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
     "req": {
-        "id": "52bfec56-d823-42c7-8d40-5855361771db",
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -136,22 +136,24 @@ if no X-Request-Id is provided this service will generate one to be available in
         "headers": {
             "host": "localhost:3000",
             "user-agent": "curl/7.67.0",
-            "accept": "*/*",
-            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db"
+            "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 60947
+        "remotePort": 53254
     },
     "context": "AspectLogger",
-    "msg": "Inside of the logger. Called Repository.Get with args: [{\"data\":\"Complex query string\",\"attributes\":{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}}]."
-}
+    "msg":"Entering Command.DoThing 
+    | args: [
+        {\"data\":\"Complex query string\",\"attributes\":{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}}]",
+            "severity": "INFO"
+        }
 {
     "level": 30,
-    "time": 1634559138328,
-    "pid": 28652,
-    "hostname": "hostname",
+    "time": "2021-10-18T14:41:51.857Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
     "req": {
-        "id": "52bfec56-d823-42c7-8d40-5855361771db",
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -161,22 +163,22 @@ if no X-Request-Id is provided this service will generate one to be available in
         "headers": {
             "host": "localhost:3000",
             "user-agent": "curl/7.67.0",
-            "accept": "*/*",
-            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db"
+            "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 60947
+        "remotePort": 53254
     },
     "context": "AspectLogger",
-    "msg": "Inside of the logger. Called DataAccess.Get with args: [\"Complex query string\",{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}]."
+    "msg": "Entering Repository.Get | args: [{\"data\":\"Complex query string\",\"attributes\":{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}}]",
+    "severity": "INFO"
 }
 {
     "level": 30,
-    "time": 1634560427303,
-    "pid": 28652,
-    "hostname": "hostname",
+    "time": "2021-10-18T14:41:51.858Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
     "req": {
-        "id": "52bfec56-d823-42c7-8d40-5855361771db",
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -186,21 +188,22 @@ if no X-Request-Id is provided this service will generate one to be available in
         "headers": {
             "host": "localhost:3000",
             "user-agent": "curl/7.67.0",
-            "accept": "*/*",
-            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db"
+            "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 60947
+        "remotePort": 53254
     },
-    "msg": "Using Complex query string to make a query"
+    "context": "AspectLogger",
+    "msg": "Entering DataAccess.Get | args: [\"Complex query string\",{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}]",
+    "severity": "INFO"
 }
 {
     "level": 30,
-    "time": 1634559138334,
-    "pid": 28652,
-    "hostname": "hostname",
+    "time": "2021-10-18T14:41:51.859Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
     "req": {
-        "id": "52bfec56-d823-42c7-8d40-5855361771db",
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -210,24 +213,150 @@ if no X-Request-Id is provided this service will generate one to be available in
         "headers": {
             "host": "localhost:3000",
             "user-agent": "curl/7.67.0",
-            "accept": "*/*",
-            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db"
+            "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 60947
+        "remotePort": 53254
+    },
+    "msg": "Using Complex query string to make a query",
+    "severity": "INFO"
+}
+{
+    "level": 30,
+    "time": "2021-10-18T14:41:51.860Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
+    "req": {
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "method": "GET",
+        "url": "/api/command",
+        "query": {},
+        "params": {
+            "0": "api/command"
+        },
+        "headers": {
+            "host": "localhost:3000",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 53254
+    },
+    "context": "AspectLogger",
+    "msg":"Exiting DataAccess.Get | 
+result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
+        "severity": "INFO"
+    }
+{
+    "level": 30,
+    "time": "2021-10-18T14:41:51.860Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
+    "req": {
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "method": "GET",
+        "url": "/api/command",
+        "query": {},
+        "params": {
+            "0": "api/command"
+        },
+        "headers": {
+            "host": "localhost:3000",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 53254
+    },
+    "context": "AspectLogger",
+    "msg":"Exiting Repository.Get | 
+result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
+        "severity": "INFO"
+    }
+{
+    "level": 30,
+    "time": "2021-10-18T14:41:51.861Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
+    "req": {
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "method": "GET",
+        "url": "/api/command",
+        "query": {},
+        "params": {
+            "0": "api/command"
+        },
+        "headers": {
+            "host": "localhost:3000",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 53254
+    },
+    "context": "AspectLogger",
+    "msg": "Exiting Command.DoThing | result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
+    "severity": "INFO"
+}
+{
+    "level": 30,
+    "time": "2021-10-18T14:41:51.861Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
+    "req": {
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "method": "GET",
+        "url": "/api/command",
+        "query": {},
+        "params": {
+            "0": "api/command"
+        },
+        "headers": {
+            "host": "localhost:3000",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 53254
+    },
+    "context": "AspectLogger",
+    "msg": "Exiting AppService.runCommand | result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
+    "severity": "INFO"
+}
+{
+    "level": 30,
+    "time": "2021-10-18T14:41:51.866Z",
+    "pid": 26048,
+    "hostname": "SLB-4PWL4Y2",
+    "req": {
+        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "method": "GET",
+        "url": "/api/command",
+        "query": {},
+        "params": {
+            "0": "api/command"
+        },
+        "headers": {
+            "host": "localhost:3000",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 53254
     },
     "res": {
         "statusCode": 200,
         "headers": {
             "x-powered-by": "Express",
-            "x-request-id": "52bfec56-d823-42c7-8d40-5855361771db",
+            "x-request-id": "65d49371-d47c-4170-8039-e273ce8f5d95",
             "content-type": "application/json; charset=utf-8",
             "content-length": "86",
             "etag": "W/\"56-Px7oRE3ex14xXSLksTZp66ipZiY\""
         }
     },
-    "responseTime": 10,
-    "msg": "request completed"
-}
+    "responseTime": 12,
+    "msg": "request completed",
+    "severity": "INFO"
+    }
 
 ```
