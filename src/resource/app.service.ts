@@ -1,7 +1,9 @@
 import {Injectable} from '@nestjs/common';
+import {Advised} from 'aspect.js';
 import {Command, ReturnPayload} from 'src/domain';
 
 @Injectable()
+@Advised()
 export class AppService {
   constructor(private command: Command) {}
 
