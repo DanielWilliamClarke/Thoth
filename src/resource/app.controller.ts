@@ -17,4 +17,9 @@ export class AppController {
   runCommand(): ReturnPayload {
     return this.appService.runCommand();
   }
+
+  @Get('throw')
+  runThrow(): void {
+    this.appService.runThrow();
+  }
 }

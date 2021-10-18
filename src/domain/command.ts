@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, Logger} from '@nestjs/common';
 import {Advised} from 'aspect.js';
 import {ReturnPayload} from './dataaccess';
 import {Repository} from './repository';
@@ -11,9 +11,13 @@ export type Payload = {
 @Advised()
 @Injectable()
 export class Command {
-  constructor(private respository: Repository) {}
+  constructor(private readonly respository: Repository) {}
 
   DoThing(payload: Payload): ReturnPayload {
     return this.respository.Get(payload);
+  }
+
+  DoThrow(): void {
+    throw new Error('fake failure');
   }
 }

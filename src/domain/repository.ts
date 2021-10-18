@@ -6,7 +6,7 @@ import {DataAccess, ReturnPayload} from './dataaccess';
 @Injectable()
 @Advised()
 export class Repository {
-  constructor(private dataaccess: DataAccess) {}
+  constructor(private readonly dataaccess: DataAccess) {}
 
   Get({data, attributes}: Payload): ReturnPayload {
     return this.dataaccess.Get(data, attributes);
