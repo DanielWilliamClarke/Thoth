@@ -15,21 +15,26 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/api (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/api')
-      .expect(200)
-      .expect('Hello World!');
-  });
+  describe('GET', () => {
+    it('/api', () => {
+      return request(app.getHttpServer())
+        .get('/api')
+        .expect(200)
+        .expect('Hello World!');
+    });
 
-  it('/api/command (GET)', () => {
-    return request(app.getHttpServer()).get('/api/command').expect(200).expect({
-      some: 'useful',
-      data: 'which',
-      we: 'need',
-      something: 'that',
-      I: 'need',
-      To: 'Find',
+    it('/api/command', () => {
+      return request(app.getHttpServer())
+        .get('/api/command')
+        .expect(200)
+        .expect({
+          some: 'useful',
+          data: 'which',
+          we: 'need',
+          something: 'that',
+          I: 'need',
+          To: 'Find',
+        });
     });
   });
 });
