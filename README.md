@@ -17,7 +17,8 @@ Aspectjs Contextual Logging POC
 - AspectJS - Library for aspect-oriented programming with JavaScript, which takes advantage of ECMAScript 2016 decorators syntax - <https://github.com/mgechev/aspect.js>
 - express-request-id - Generate UUID for request and add it to X-Request-Id header. In case request contains X-Request-Id header, uses its value instead - <https://www.npmjs.com/package/express-request-id>
 - pino-stackdriver - A utility that makes express-pino logs StackDriver-compatible - <https://github.com/binxhealth/pino-stackdriver>
-  
+- nestjs-otel - OpenTelemetry module for Nest. - <https://github.com/pragmaticivan/nestjs-otel>
+
 ## Commands
 
 ```TypeScript
