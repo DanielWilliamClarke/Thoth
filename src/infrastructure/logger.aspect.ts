@@ -1,6 +1,41 @@
-import {afterMethod, beforeMethod, Metadata, onThrowOfMethod} from 'aspect.js';
+import {createStream} from '@binxhealth/pino-stackdriver';
 import {Logger} from '@nestjs/common';
+import {context, trace} from '@opentelemetry/api';
+import {afterMethod, beforeMethod, Metadata, onThrowOfMethod} from 'aspect.js';
 import {MethodSelector} from 'aspect.js/src/join_points';
+import {LoggerModule} from 'nestjs-pino';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const traceableFormatter = (object: any): any => {
+  const span = trace.getSpan(context.active());
+  if (!span) return {...object};
+  const {spanId, traceId} = trace.getSpan(context.active())?.spanContext();
+  return {...object, spanId, traceId};
+};
+
+export const LoggerModuleConfig = LoggerModule.forRoot({
+  pinoHttp: [
+    {
+      formatters: ['log', 'debug', 'error', 'warn'].reduce(
+        (acc, method): Object => {
+          acc[method] = traceableFormatter;
+          return acc;
+        },
+        {}
+      ),
+      base: undefined, // Set to undefined to avoid adding pid, hostname properties to each log.
+      redact: {
+        paths: [
+          'req.headers.authorization',
+          'req.headers["x-api-key"]',
+          'res.headers.etag',
+        ],
+        remove: true,
+      },
+    },
+    createStream(),
+  ],
+});
 
 export class AspectLogger {
   private static readonly pattern: MethodSelector = {

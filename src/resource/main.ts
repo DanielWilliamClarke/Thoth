@@ -1,12 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import {NestFactory} from '@nestjs/core';
 import * as addRequestIdMiddleware from 'express-request-id';
-import { Logger } from 'nestjs-pino';
+import {Logger} from 'nestjs-pino';
 
-import otelSDK from '../infrastructure/tracing';
-import { AppModule } from './app.module';
+import {Tracer} from '../infrastructure';
+import {AppModule} from './app.module';
+
+import '../infrastructure';
 
 async function bootstrap() {
-  await otelSDK.start();
+  await Tracer.getInstance().start();
 
   const app = await NestFactory.create(AppModule, {bufferLogs: true});
   app.useLogger(app.get(Logger));

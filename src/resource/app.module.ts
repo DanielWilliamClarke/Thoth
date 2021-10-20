@@ -1,9 +1,8 @@
 import {Logger, Module} from '@nestjs/common';
 import {Command, DataAccess, Repository} from '../domain';
-import {
-  LoggerModuleConfig,
-  OpenTelemetryModuleConfig,
-} from '../infrastructure/tracing';
+import {OpenTelemetryModuleConfig, LoggerModuleConfig} from '../infrastructure';
+
+
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 

@@ -2,8 +2,6 @@ import {Controller, Get} from '@nestjs/common';
 import {ReturnPayload} from 'src/domain';
 import {AppService} from './app.service';
 
-import '../infrastructure/logger.aspect';
-
 @Controller('api')
 export class AppController {
   constructor(private readonly appService: AppService) {}
