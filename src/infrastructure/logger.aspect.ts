@@ -9,8 +9,10 @@ import {LoggerModule} from 'nestjs-pino';
 const traceableFormatter = (object: any): any => {
   const span = trace.getSpan(context.active());
   if (!span) return {...object};
-  const {spanId, traceId} = trace.getSpan(context.active())?.spanContext();
-  return {...object, spanId, traceId};
+  const {spanId, traceId, traceFlags} = trace
+    .getSpan(context.active())
+    ?.spanContext();
+  return {...object, spanId, traceId, traceFlags};
 };
 
 export const LoggerModuleConfig = LoggerModule.forRoot({
