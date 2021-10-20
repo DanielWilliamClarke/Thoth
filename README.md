@@ -47,7 +47,8 @@ npm run lint
 npm run fix
 
 // Test
-...lol ...lmao
+npm run test:e2e
+
 ```
 
 Once the service is running you can make requests to it with curl
