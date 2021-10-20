@@ -36,17 +36,15 @@ const loggerOptions: Pino.LoggerOptions = {
   },
 };
 
-let opts: Pino.DestinationStream = undefined;
-if (process.env.LOG_FILE_NAME) {
-  opts = Pino.destination(process.env.LOG_FILE_NAME)
-}
-
+const destination: Pino.DestinationStream = process.env.LOG_FILE_NAME
+  ? Pino.destination(process.env.LOG_FILE_NAME)
+  : undefined;
 export const LoggerModuleConfig = LoggerModule.forRoot({
   pinoHttp: [
     {
-      logger: Pino(loggerOptions, opts),
+      logger: Pino(loggerOptions, destination),
     },
-    createStream(),
+    createStream(destination),
   ],
 });
 
