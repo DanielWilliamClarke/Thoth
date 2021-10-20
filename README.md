@@ -19,11 +19,16 @@ Aspectjs Contextual Logging POC
 - express-request-id - Generate UUID for request and add it to X-Request-Id header. In case request contains X-Request-Id header, uses its value instead - <https://www.npmjs.com/package/express-request-id>
 - pino-stackdriver - A utility that makes express-pino logs StackDriver-compatible - <https://github.com/binxhealth/pino-stackdriver>
 - nestjs-otel - OpenTelemetry module for Nest. - <https://github.com/pragmaticivan/nestjs-otel>
+- Observability Whitepaper <https://github.com/cncf/tag-observability/blob/main/whitepaper.md>
+- pino-http - High-speed HTTP logger for Node.js - <https://github.com/pinojs/pino-http#pinohttplogger-plogger>
+  - logger options <https://github.com/pinojs/pino/blob/HEAD/docs/api.md#options>
+  - redaction <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths> 
 
 ## Things to consider
 
-- [ ] How to obsfuscate senetive and secret request / response data such as Authorization tokens or api keys
-- [ ] How to point open telemetry to correct observability stack
+- [x] How to redact senetive and secret request / response data such as Authorization tokens or api keys
+- [x] How to point open telemetry to correct observability stack
+- [x] how to log spanid and traceid in logs
 - [ ] Are we performing semantic logging properly?
 - [ ] Determine the correct attributes to log
 
@@ -79,14 +84,14 @@ if no X-Request-Id is provided this service will generate one to be available in
 ## Expected logs for api/command endpoint
 
 ```JSON
-// curl localhost:3000/api/command
+// curl -H "Authorization: some-key" -H "x-api-key: asdasdfasd" http://localhost:3000/api/command
+// {"some":"useful","data":"which","we":"need","something":"that","I":"need","To":"Find"}
 {
+    // pid and hostname are removed in this example
     "level": 30,
-    "time": "2021-10-18T14:41:51.855Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.172Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95", // <- X-Request-Id generated
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3", // <- x-request-id generated
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -97,21 +102,22 @@ if no X-Request-Id is provided this service will generate one to be available in
             "host": "localhost:3000",
             "user-agent": "curl/7.67.0",
             "accept": "*/*"
+            // Authorizaton and X-API-Key headers are removed
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
+    "spanId": "568cfba86549be3f", // Open telemetry spanId generated
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e", // Open telemetry traceId generated
     "msg": "Constructing logger",
-    "severity": "INFO"
+    "severity": "INFO" // <- Stackdriver compatible severity is logged
 }
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.856Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.173Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -124,19 +130,19 @@ if no X-Request-Id is provided this service will generate one to be available in
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "Entering AppService.runCommand | args: []",
     "severity": "INFO"
 }
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.857Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.175Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -149,21 +155,19 @@ if no X-Request-Id is provided this service will generate one to be available in
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
-    "msg":"Entering Command.DoThing 
-    | args: [
-        {\"data\":\"Complex query string\",\"attributes\":{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}}]",
-            "severity": "INFO"
-        }
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
+    "msg": "Entering Command.DoThing | args: [{\"data\":\"Complex query string\",\"attributes\":{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}}]",
+    "severity": "INFO"
+}
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.857Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.175Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -176,19 +180,19 @@ if no X-Request-Id is provided this service will generate one to be available in
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "Entering Repository.Get | args: [{\"data\":\"Complex query string\",\"attributes\":{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}}]",
     "severity": "INFO"
 }
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.858Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.176Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -201,19 +205,19 @@ if no X-Request-Id is provided this service will generate one to be available in
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "Entering DataAccess.Get | args: [\"Complex query string\",{\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}]",
     "severity": "INFO"
 }
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.859Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.177Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -226,18 +230,18 @@ if no X-Request-Id is provided this service will generate one to be available in
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "Using Complex query string to make a query",
     "severity": "INFO"
 }
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.860Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.178Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -250,20 +254,19 @@ if no X-Request-Id is provided this service will generate one to be available in
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
-    "msg":"Exiting DataAccess.Get | 
-result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
-        "severity": "INFO"
-    }
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
+    "msg": "Exiting DataAccess.Get | result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
+    "severity": "INFO"
+}
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.860Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.178Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -276,20 +279,19 @@ result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
-    "msg":"Exiting Repository.Get | 
-result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
-        "severity": "INFO"
-    }
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
+    "msg": "Exiting Repository.Get | result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
+    "severity": "INFO"
+}
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.861Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.179Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -302,19 +304,19 @@ result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "Exiting Command.DoThing | result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
     "severity": "INFO"
 }
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.861Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.180Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -327,19 +329,19 @@ result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "context": "AspectLogger",
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "Exiting AppService.runCommand | result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"that\",\"I\":\"need\",\"To\":\"Find\"}",
     "severity": "INFO"
-}
+}    
 {
     "level": 30,
-    "time": "2021-10-18T14:41:51.866Z",
-    "pid": 26048,
-    "hostname": "SLB-4PWL4Y2",
+    "time": "2021-10-20T10:19:06.185Z",
     "req": {
-        "id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+        "id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
         "method": "GET",
         "url": "/api/command",
         "query": {},
@@ -352,21 +354,21 @@ result: {\"some\":\"useful\",\"data\":\"which\",\"we\":\"need\",\"something\":\"
             "accept": "*/*"
         },
         "remoteAddress": "::ffff:127.0.0.1",
-        "remotePort": 53254
+        "remotePort": 53166
     },
     "res": {
         "statusCode": 200,
         "headers": {
             "x-powered-by": "Express",
-            "x-request-id": "65d49371-d47c-4170-8039-e273ce8f5d95",
+            "x-request-id": "7f04f222-e64e-4604-8c5b-93e5561adde3",
             "content-type": "application/json; charset=utf-8",
-            "content-length": "86",
-            "etag": "W/\"56-Px7oRE3ex14xXSLksTZp66ipZiY\""
+            "content-length": "86"
         }
     },
-    "responseTime": 12,
+    "responseTime": 14,
+    "spanId": "568cfba86549be3f",
+    "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "request completed",
     "severity": "INFO"
-    }
-
+}
 ```

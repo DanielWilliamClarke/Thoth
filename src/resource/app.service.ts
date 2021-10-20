@@ -1,6 +1,7 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {Advised} from 'aspect.js';
 import {Command, ReturnPayload} from '../domain';
+import {Span} from 'nestjs-otel';
 
 @Injectable()
 @Advised()
@@ -10,10 +11,12 @@ export class AppService {
     private readonly logger: Logger
   ) {}
 
+  @Span('GET-HELLO')
   getHello(): string {
     return 'Hello World!';
   }
 
+  @Span('RUN-COMMAND')
   runCommand(): ReturnPayload {
     return this.command.DoThing({
       data: 'Complex query string',
@@ -25,6 +28,7 @@ export class AppService {
     });
   }
 
+  @Span('RUN-THROW')
   runThrow(): void {
     try {
       this.command.DoThrow();
