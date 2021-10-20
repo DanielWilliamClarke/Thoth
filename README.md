@@ -22,7 +22,8 @@ Aspectjs Contextual Logging POC
 - Observability Whitepaper <https://github.com/cncf/tag-observability/blob/main/whitepaper.md>
 - pino-http - High-speed HTTP logger for Node.js - <https://github.com/pinojs/pino-http#pinohttplogger-plogger>
   - logger options <https://github.com/pinojs/pino/blob/HEAD/docs/api.md#options>
-  - redaction <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths> 
+  - redaction <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
+    - path syntax <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
 
 ## Things to consider
 
