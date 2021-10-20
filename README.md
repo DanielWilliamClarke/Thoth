@@ -77,8 +77,12 @@ curl -v -H "X-Request-Id: your-x-request-id" localhost:3000/api/
 # <
 # Hello World!* Connection #0 to host localhost left intact
 
+# Visualise request tracing through whole application
 curl -H "X-Request-Id: your-x-request-id" localhost:3000/api/command
-//{"some":"useful","data":"which","we":"need","something":"that","I":"need","To":"Find"}
+# {"some":"useful","data":"which","we":"need","something":"that","I":"need","To":"Find"}
+
+# Trigger an error that is caught and logged internally
+curl -H "X-Request-Id: your-x-request-id" localhost:3000/api/throw
 ```
 
 if no X-Request-Id is provided this service will generate one to be available in the response headers (see below for details)
