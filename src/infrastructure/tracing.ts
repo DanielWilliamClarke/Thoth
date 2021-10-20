@@ -21,13 +21,6 @@ export const OpenTelemetryModuleConfig = OpenTelemetryModule.forRoot({
     defaultMetrics: true, // Includes Default Metrics
     apiMetrics: {
       enable: true, // Includes api metrics
-      timeBuckets: [], // You can change the default time buckets
-      defaultLabels: {
-        // You can set default labels for api metrics
-        custom: 'label',
-      },
-      ignoreRoutes: ['/favicon.ico'], // You can ignore specific routes (See https://docs.nestjs.com/middleware#excluding-routes for options)
-      ignoreUndefinedRoutes: false, //Records metrics for all URLs, even undefined ones
     },
   },
 });
@@ -44,7 +37,7 @@ export class Tracer {
   private static build(): NodeSDK {
     return new NodeSDK({
       metricExporter: new PrometheusExporter({
-        port: 8081,
+        port: 9090,
       }),
       metricInterval: 1000,
       spanProcessor: new BatchSpanProcessor(new JaegerExporter()),

@@ -5,6 +5,8 @@ import {afterMethod, beforeMethod, Metadata, onThrowOfMethod} from 'aspect.js';
 import {MethodSelector} from 'aspect.js/src/join_points';
 import {LoggerModule} from 'nestjs-pino';
 
+import Pino from 'pino';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const traceableFormatter = (object: any): any => {
   const span = trace.getSpan(context.active());
@@ -15,25 +17,34 @@ const traceableFormatter = (object: any): any => {
   return {...object, spanId, traceId, traceFlags};
 };
 
+const loggerOptions: Pino.LoggerOptions = {
+  formatters: ['log', 'debug', 'error', 'warn'].reduce(
+    (acc, method): Object => {
+      acc[method] = traceableFormatter;
+      return acc;
+    },
+    {}
+  ),
+  base: undefined, // Set to undefined to avoid adding pid, hostname properties to each log.
+  redact: {
+    paths: [
+      'req.headers.authorization',
+      'req.headers["x-api-key"]',
+      'res.headers.etag',
+    ],
+    remove: true,
+  },
+};
+
+let opts: Pino.DestinationStream = undefined;
+if (process.env.LOG_FILE_NAME) {
+  opts = Pino.destination(process.env.LOG_FILE_NAME)
+}
+
 export const LoggerModuleConfig = LoggerModule.forRoot({
   pinoHttp: [
     {
-      formatters: ['log', 'debug', 'error', 'warn'].reduce(
-        (acc, method): Object => {
-          acc[method] = traceableFormatter;
-          return acc;
-        },
-        {}
-      ),
-      base: undefined, // Set to undefined to avoid adding pid, hostname properties to each log.
-      redact: {
-        paths: [
-          'req.headers.authorization',
-          'req.headers["x-api-key"]',
-          'res.headers.etag',
-        ],
-        remove: true,
-      },
+      logger: Pino(loggerOptions, opts),
     },
     createStream(),
   ],
