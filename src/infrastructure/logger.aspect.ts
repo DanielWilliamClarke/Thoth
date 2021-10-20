@@ -44,9 +44,10 @@ export const LoggerModuleConfig = LoggerModule.forRoot({
     {
       logger: Pino(loggerOptions, destination),
     },
-    createStream(destination),
+    createStream(),
   ],
 });
+
 
 export class AspectLogger {
   private static readonly pattern: MethodSelector = {
