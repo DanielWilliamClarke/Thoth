@@ -103,7 +103,7 @@ this will build the `Thoth` service and then deploy it along with the Prometheus
 
 ### Visualise logs within Grafana
 
-- Naviagate to `localhost:3000`
+- Naviagate to <http://localhost:3000> to open `Grafana`
 - Open `Settings`
 - Add data source and search `Loki`
 - Set the URL to <http://loki:3100> and hit `save and test` -> should be successful
