@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "3522c9ff-ae70-4961-ad06-cbdc1498a73b",
+		"name": "Thoth",
+		"description": "Aspectjs Contextual Logging POC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api generate-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text().toLowerCase()).to.include(\"world\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const requestId = pm.response.headers.get(\"x-request-id\");\r",
+							"\r",
+							"    const regex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89ABab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;\r",
+							"    pm.expect(requestId).to.match(regex)\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth}}",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "{{apikey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api pass-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text().toLowerCase()).to.include(\"world\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const expectedRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    const actualRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    pm.expect(expectedRequestId).to.eq(actualRequestId)\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{auth}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apikey}}"
+					},
+					{
+						"key": "x-request-id",
+						"value": "my-request-id",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/command pass-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const expectedRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    const actualRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    pm.expect(expectedRequestId).to.eq(actualRequestId)\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{auth}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apikey}}"
+					},
+					{
+						"key": "x-request-id",
+						"type": "text",
+						"value": "my-request-id"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/command",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/throw pass-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const expectedRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    const actualRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    pm.expect(expectedRequestId).to.eq(actualRequestId)\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{auth}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apikey}}"
+					},
+					{
+						"key": "x-request-id",
+						"type": "text",
+						"value": "my-request-id"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/throw",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"throw"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/command generate-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const requestId = pm.response.headers.get(\"x-request-id\");\r",
+							"\r",
+							"    const regex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89ABab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;\r",
+							"    pm.expect(requestId).to.match(regex)\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{auth}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apikey}}"
+					},
+					{
+						"key": "x-request-id",
+						"type": "text",
+						"value": "my-request-id",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/command",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/throw generate-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const requestId = pm.response.headers.get(\"x-request-id\");\r",
+							"\r",
+							"    const regex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89ABab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;\r",
+							"    pm.expect(requestId).to.match(regex)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{auth}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apikey}}"
+					},
+					{
+						"key": "x-request-id",
+						"type": "text",
+						"value": "my-request-id",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/throw",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"throw"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	}
+}
