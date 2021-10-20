@@ -2,11 +2,11 @@
   <img src="https://see.fontimg.com/api/renderfont4/K5mo/eyJyIjoiZnMiLCJoIjoyMDAsInciOjEwMDAsImZzIjoyMDAsImZnYyI6IiM0NEE5REEiLCJiZ2MiOiIjRkZGRkZGIiwidCI6MX0/VEhPVEg/paintingwithchocolate.png" alt="Tattoo fonts">
 <p>
 
-# Thoth
+# 🏜️ Thoth
 
 Aspectjs Contextual Logging POC
 
-- [Thoth](#thoth)
+- [🏜️ Thoth](#️-thoth)
   - [References](#references)
   - [Things to consider](#things-to-consider)
   - [Commands](#commands)
