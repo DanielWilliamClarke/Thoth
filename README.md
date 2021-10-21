@@ -28,6 +28,8 @@ Aspectjs Contextual Logging POC
   - logger options <https://github.com/pinojs/pino/blob/HEAD/docs/api.md#options>
   - redaction <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
     - path syntax <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
+- AsyncLocalStorage - Each instance of AsyncLocalStorage maintains an independent storage context. Multiple instances can safely exist simultaneously without risk of interfering with each other data. - <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
+  - Request Context Middleware based on <https://gist.github.com/bengry/924a9b93c25d8a98bffdfc0a847f0dbe>
 
 ## Things to consider
 
@@ -35,6 +37,7 @@ Aspectjs Contextual Logging POC
 - [x] How to point open telemetry to correct observability stack
 - [x] how to log spanid and traceid in logs
 - [x] Access request context cleanly outside of `AppController`
+- [ ] Need to ensure our usage of AsyncLocalStorage is thread safe
 - [ ] Stackdriver compatibility stream not compatible with standard file stream
 - [ ] Are we performing semantic logging properly?
 - [ ] Determine the correct attributes to log
