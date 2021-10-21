@@ -40,7 +40,7 @@ type AppOptions = {
 
 @Module({})
 export class AppModule implements NestModule {
-  static async forRoot(options: AppOptions): Promise<DynamicModule> {
+  static forRoot(options: AppOptions): DynamicModule {
     const imports = [];
 
     if (options.runTracer) {
