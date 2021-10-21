@@ -40,5 +40,12 @@ describe('AppController (e2e)', () => {
     it('/api/throw', () => {
       return request(app.getHttpServer()).get('/api/throw').expect(200);
     });
+
+    xit('/api/passthru', () => {
+      return request(app.getHttpServer())
+        .get('/api/passthru')
+        .expect(200)
+        .expect('Hello World!');
+    });
   });
 });

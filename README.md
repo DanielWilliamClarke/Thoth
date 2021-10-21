@@ -14,6 +14,7 @@ Aspectjs Contextual Logging POC
     - [Visualise logs within Grafana](#visualise-logs-within-grafana)
   - [Postman](#postman)
   - [Expected logs for api/command endpoint](#expected-logs-for-apicommand-endpoint)
+  - [Extraction and pass through of X-Request-Id](#extraction-and-pass-through-of-x-request-id)
 
 ## References
 
@@ -411,5 +412,307 @@ when running standalone via `npm run start` logs are dumped to the console.
     "traceId": "42af2ee285a0df44567ca7227c9fcb5e",
     "msg": "request completed",
     "severity": "INFO"
+}
+```
+
+## Extraction and pass through of X-Request-Id 
+
+Calling `localhost:5555/api/passthru` will make a call to `localhost:5555/api`, the aim of this is to demonstate that we can access the mainline request context outside of the `AppController`, without having to push parameters and arguments through the code to their required destinations.
+
+Below is the log output of the `passthru` endpoint, you will see that the `req.id` and the `X-Request-Id` header are passed to the subsequent API call correctly.
+
+```JSON
+// curl localhost:5555/api/passthru
+// Hello World!
+{
+    "level": 30,
+    "time": 1634809427005,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8", // <- Request id generated here
+        "method": "GET",
+        "url": "/api/passthru",
+        "query": {},
+        "params": {
+            "0": "api/passthru"
+        },
+        "headers": {
+            "host": "localhost:5555",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56644
+    },
+    "context": "AspectLogger",
+    "spanId": "1883af6dbd054293",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "Constructing logger"
+}
+{
+    "level": 30,
+    "time": 1634809427006,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api/passthru",
+        "query": {},
+        "params": {
+            "0": "api/passthru"
+        },
+        "headers": {
+            "host": "localhost:5555",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56644
+    },
+    "context": "AspectLogger",
+    "spanId": "1883af6dbd054293",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "Entering AppService.passthru | args: []"
+}
+{
+    "level": 30,
+    "time": 1634809427008,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api/passthru",
+        "query": {},
+        "params": {
+            "0": "api/passthru"
+        },
+        "headers": {
+            "host": "localhost:5555",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56644
+    },
+    "context": "AspectLogger",
+    "spanId": "1883af6dbd054293",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "Entering ClientAPI.Get | args: []"
+}
+{
+    "level": 30,
+    "time": 1634809427008,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api/passthru",
+        "query": {},
+        "params": {
+            "0": "api/passthru"
+        },
+        "headers": {
+            "host": "localhost:5555",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56644
+    },
+    "spanId": "1883af6dbd054293",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "calling /api on self"
+}
+{
+    "level": 30,
+    "time": 1634809427015,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api/passthru",
+        "query": {},
+        "params": {
+            "0": "api/passthru"
+        },
+        "headers": {
+            "host": "localhost:5555",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56644
+    },
+    "context": "AspectLogger",
+    "spanId": "1883af6dbd054293",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "Exiting ClientAPI.Get | result: {}"
+}
+{
+    "level": 30,
+    "time": 1634809427015,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api/passthru",
+        "query": {},
+        "params": {
+            "0": "api/passthru"
+        },
+        "headers": {
+            "host": "localhost:5555",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56644
+    },
+    "context": "AspectLogger",
+    "spanId": "1883af6dbd054293",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a", // <- Trace id generated via opentelemetry
+    "traceFlags": 1,
+    "msg": "Exiting AppService.passthru | result: {}"
+}
+{ // <- called to /api here
+    "level": 30,
+    "time": 1634809427020,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8", // <- Request id from parent API call is present here in the child call
+        "method": "GET",
+        "url": "/api",
+        "query": {},
+        "params": {
+            "0": "api"
+        },
+        "headers": {
+            "accept": "application/json, text/plain, */*",
+            "x-request-id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+            "user-agent": "axios/0.23.0",
+            "uber-trace-id": "013cdb493be0f90fb478331d4a8d458a:66185639357e4490:0:01",
+            "traceparent": "00-013cdb493be0f90fb478331d4a8d458a-66185639357e4490-01",
+            "b3": "013cdb493be0f90fb478331d4a8d458a-66185639357e4490-1",
+            "x-b3-traceid": "013cdb493be0f90fb478331d4a8d458a", // <- Same Trace id is present here in child call
+            "x-b3-spanid": "66185639357e4490",
+            "x-b3-sampled": "1",
+            "host": "localhost:5555",
+            "connection": "close"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56645
+    },
+    "context": "AspectLogger",
+    "spanId": "ac55c5fe5b0fcf84",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "Entering AppService.getHello | args: []"
+}
+{
+    "level": 30,
+    "time": 1634809427021,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api",
+        "query": {},
+        "params": {
+            "0": "api"
+        },
+        "headers": {
+            "accept": "application/json, text/plain, */*",
+            "x-request-id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+            "user-agent": "axios/0.23.0",
+            "uber-trace-id": "013cdb493be0f90fb478331d4a8d458a:66185639357e4490:0:01",
+            "traceparent": "00-013cdb493be0f90fb478331d4a8d458a-66185639357e4490-01",
+            "b3": "013cdb493be0f90fb478331d4a8d458a-66185639357e4490-1",
+            "x-b3-traceid": "013cdb493be0f90fb478331d4a8d458a",
+            "x-b3-spanid": "66185639357e4490",
+            "x-b3-sampled": "1",
+            "host": "localhost:5555",
+            "connection": "close"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56645
+    },
+    "context": "AspectLogger",
+    "spanId": "ac55c5fe5b0fcf84",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "Exiting AppService.getHello | result: \"Hello World!\""
+}
+{
+    "level": 30,
+    "time": 1634809427026,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api",
+        "query": {},
+        "params": {
+            "0": "api"
+        },
+        "headers": {
+            "accept": "application/json, text/plain, */*",
+            "x-request-id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+            "user-agent": "axios/0.23.0",
+            "uber-trace-id": "013cdb493be0f90fb478331d4a8d458a:66185639357e4490:0:01",
+            "traceparent": "00-013cdb493be0f90fb478331d4a8d458a-66185639357e4490-01",
+            "b3": "013cdb493be0f90fb478331d4a8d458a-66185639357e4490-1",
+            "x-b3-traceid": "013cdb493be0f90fb478331d4a8d458a",
+            "x-b3-spanid": "66185639357e4490",
+            "x-b3-sampled": "1",
+            "host": "localhost:5555",
+            "connection": "close"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56645
+    },
+    "res": {
+        "statusCode": 200,
+        "headers": {
+            "x-powered-by": "Express",
+            "x-request-id": "9aeda399-0719-4eed-b258-c5c13348e9a8", // <- Request id present in res headers of child call
+            "content-type": "text/html; charset=utf-8",
+            "content-length": "12"
+        }
+    },
+    "responseTime": 7,
+    "spanId": "ac55c5fe5b0fcf84",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "request completed"
+}
+{
+    "level": 30,
+    "time": 1634809427031,
+    "req": {
+        "id": "9aeda399-0719-4eed-b258-c5c13348e9a8",
+        "method": "GET",
+        "url": "/api/passthru",
+        "query": {},
+        "params": {
+            "0": "api/passthru"
+        },
+        "headers": {
+            "host": "localhost:5555",
+            "user-agent": "curl/7.67.0",
+            "accept": "*/*"
+        },
+        "remoteAddress": "::ffff:127.0.0.1",
+        "remotePort": 56644
+    },
+    "res": {
+        "statusCode": 200,
+        "headers": {
+            "x-powered-by": "Express",
+            "x-request-id": "9aeda399-0719-4eed-b258-c5c13348e9a8",  // <- Same Request id present in res headers of parent call
+            "content-type": "text/html; charset=utf-8",
+            "content-length": "12"
+        }
+    },
+    "responseTime": 27,
+    "spanId": "1883af6dbd054293",
+    "traceId": "013cdb493be0f90fb478331d4a8d458a",
+    "traceFlags": 1,
+    "msg": "request completed"
 }
 ```

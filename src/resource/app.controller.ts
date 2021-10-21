@@ -20,4 +20,9 @@ export class AppController {
   runThrow(): void {
     this.appService.runThrow();
   }
+
+  @Get('passthru')
+  async passthru(): Promise<string> {
+    return await this.appService.passthru();
+  }
 }

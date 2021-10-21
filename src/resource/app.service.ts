@@ -1,13 +1,15 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {Advised} from 'aspect.js';
-import {Command, ReturnPayload} from '../domain';
+import {Command, ClientAPI, ReturnPayload} from '../domain';
 import {Span} from 'nestjs-otel';
+import {firstValueFrom} from 'rxjs';
 
 @Injectable()
 @Advised()
 export class AppService {
   constructor(
     private readonly command: Command,
+    private readonly clientApi: ClientAPI,
     private readonly logger: Logger
   ) {}
 
@@ -35,5 +37,10 @@ export class AppService {
     } catch (ex) {
       this.logger.error(`Caught error: ${ex}`);
     }
+  }
+
+  @Span('PASS-THRU')
+  async passthru(): Promise<string> {
+    return await this.clientApi.Get();
   }
 }
