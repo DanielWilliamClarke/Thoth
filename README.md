@@ -38,7 +38,7 @@ Aspectjs Contextual Logging POC
 - [x] How to point open telemetry to correct observability stack
 - [x] how to log spanid and traceid in logs
 - [x] Access request context cleanly outside of `AppController`
-- [ ] Need to ensure our usage of AsyncLocalStorage is thread safe
+- [x] Need to ensure our usage of AsyncLocalStorage is thread safe
 - [ ] Stackdriver compatibility stream not compatible with standard file stream
 - [ ] Are we performing semantic logging properly?
 - [ ] Determine the correct attributes to log
