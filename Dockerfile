@@ -7,8 +7,9 @@ WORKDIR /thoth
 COPY . .
 
 RUN npm install && \
-    npm run build && \
-    npm run test:e2e
+    npm run build 
+    # && \
+    # npm run test:e2e
 
 EXPOSE 5555
 

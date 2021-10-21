@@ -1,13 +1,11 @@
-import {HttpModule} from '@nestjs/axios';
 import {Logger, MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
 import {context, trace} from '@opentelemetry/api';
 import * as addRequestIdMiddleware from 'express-request-id';
-import {ClientAPI, Command, DataAccess, Repository} from '../domain';
+import {DomainModule} from '../domain';
 import {
   RequestLoggerModule,
   TracingModule,
   RequestContextMiddleware,
-  RequestContextModule,
   AspectModule,
 } from '../infrastructure';
 import {AppController} from './app.controller';
@@ -44,12 +42,10 @@ const logFormatter = (object: any): any => {
 
     AspectModule.forRoot({logger: new Logger('ASPECT LOGGER')}),
 
-    RequestContextModule,
-
-    HttpModule,
+    DomainModule,
   ],
   controllers: [AppController],
-  providers: [AppService, Command, Repository, DataAccess, ClientAPI, Logger],
+  providers: [AppService, Logger],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
