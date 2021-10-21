@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {Advised} from 'aspect.js';
-import {ReturnPayload} from './dataaccess';
-import {Repository} from './repository';
+import {ReturnPayload} from './dataaccess.service';
+import {RepositoryService} from './repository.service';
 
 export type Payload = {
   data: string;
@@ -10,8 +10,8 @@ export type Payload = {
 
 @Advised()
 @Injectable()
-export class Command {
-  constructor(private readonly respository: Repository) {}
+export class CommandService {
+  constructor(private readonly respository: RepositoryService) {}
 
   DoThing(payload: Payload): ReturnPayload {
     return this.respository.Get(payload);

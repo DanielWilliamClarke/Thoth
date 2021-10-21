@@ -9,7 +9,7 @@ import {AxiosResponse} from 'axios';
 
 @Injectable()
 @Advised()
-export class ClientAPI {
+export class ClientAPIService {
   constructor(
     private readonly logger: Logger,
     private readonly contextService: RequestContextService,

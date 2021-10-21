@@ -8,7 +8,7 @@ export type ReturnPayload = {
 
 @Injectable()
 @Advised()
-export class DataAccess {
+export class DataAccessService {
   constructor(private readonly logger: Logger) {}
 
   Get(data: string, attributes: Record<string, string>): ReturnPayload {

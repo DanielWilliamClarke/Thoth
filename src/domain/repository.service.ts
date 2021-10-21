@@ -1,12 +1,12 @@
 import {Injectable} from '@nestjs/common';
 import {Advised} from 'aspect.js';
-import {Payload} from './command';
-import {DataAccess, ReturnPayload} from './dataaccess';
+import {Payload} from './command.service';
+import {DataAccessService, ReturnPayload} from './dataaccess.service';
 
 @Injectable()
 @Advised()
-export class Repository {
-  constructor(private readonly dataaccess: DataAccess) {}
+export class RepositoryService {
+  constructor(private readonly dataaccess: DataAccessService) {}
 
   Get({data, attributes}: Payload): ReturnPayload {
     return this.dataaccess.Get(data, attributes);

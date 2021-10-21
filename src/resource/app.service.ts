@@ -1,14 +1,14 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {Advised} from 'aspect.js';
-import {Command, ClientAPI, ReturnPayload} from '../domain';
+import {CommandService, ClientAPIService, ReturnPayload} from '../domain';
 import {Span} from 'nestjs-otel';
 
 @Injectable()
 @Advised()
 export class AppService {
   constructor(
-    private readonly command: Command,
-    private readonly clientApi: ClientAPI,
+    private readonly command: CommandService,
+    private readonly clientApi: ClientAPIService,
     private readonly logger: Logger
   ) {}
 
