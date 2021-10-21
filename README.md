@@ -34,6 +34,7 @@ Aspectjs Contextual Logging POC
 - [x] How to redact senetive and secret request / response data such as Authorization tokens or api keys
 - [x] How to point open telemetry to correct observability stack
 - [x] how to log spanid and traceid in logs
+- [x] Access request context cleanly outside of `AppController`
 - [ ] Stackdriver compatibility stream not compatible with standard file stream
 - [ ] Are we performing semantic logging properly?
 - [ ] Determine the correct attributes to log
