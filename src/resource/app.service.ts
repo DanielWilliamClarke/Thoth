@@ -2,7 +2,6 @@ import {Injectable, Logger} from '@nestjs/common';
 import {Advised} from 'aspect.js';
 import {Command, ClientAPI, ReturnPayload} from '../domain';
 import {Span} from 'nestjs-otel';
-import {firstValueFrom} from 'rxjs';
 
 @Injectable()
 @Advised()

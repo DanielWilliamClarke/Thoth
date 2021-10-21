@@ -12,34 +12,18 @@ import {B3InjectEncoding, B3Propagator} from '@opentelemetry/propagator-b3';
 import {JaegerPropagator} from '@opentelemetry/propagator-jaeger';
 import {NodeSDK} from '@opentelemetry/sdk-node';
 import {BatchSpanProcessor} from '@opentelemetry/tracing';
-import {OpenTelemetryModule} from 'nestjs-otel';
-import * as process from 'process';
 
-export const OpenTelemetryModuleConfig = OpenTelemetryModule.forRoot({
-  metrics: {
-    hostMetrics: true, // Includes Host Metrics
-    defaultMetrics: true, // Includes Default Metrics
-    apiMetrics: {
-      enable: true, // Includes api metrics
-    },
-  },
-});
+export type TracerOptions = {
+  interval: number;
+};
 
 export class Tracer {
-  private static instance: NodeSDK;
-  public static getInstance(): NodeSDK {
-    if (!Tracer.instance) {
-      Tracer.instance = Tracer.build();
-    }
-    return Tracer.instance;
-  }
-
-  private static build(): NodeSDK {
+  public static build(options: TracerOptions): NodeSDK {
     return new NodeSDK({
       metricExporter: new PrometheusExporter({
         port: 9090,
       }),
-      metricInterval: 1000,
+      metricInterval: options.interval,
       spanProcessor: new BatchSpanProcessor(new JaegerExporter()),
       contextManager: new AsyncLocalStorageContextManager(),
       textMapPropagator: new CompositePropagator({
@@ -57,16 +41,3 @@ export class Tracer {
     });
   }
 }
-
-// You can also use the shutdown method to gracefully shut down the SDK before process shutdown
-// or on some operating system signal.
-process.on('SIGTERM', () => {
-  Tracer.getInstance()
-    .shutdown()
-    .then(
-      () => console.log('SDK shut down successfully'),
-      err => console.log('Error shutting down SDK', err)
-    )
-    // eslint-disable-next-line no-process-exit
-    .finally(() => process.exit(0));
-});
