@@ -119,6 +119,65 @@
 			"response": []
 		},
 		{
+			"name": "/passthru pass-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text().toLowerCase()).to.include(\"world\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const expectedRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    const actualRequestId = pm.request.headers.get(\"x-request-id\");\r",
+							"    pm.expect(expectedRequestId).to.eq(actualRequestId)\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{auth}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apikey}}"
+					},
+					{
+						"key": "x-request-id",
+						"type": "text",
+						"value": "my-request-id"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/passthru",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"passthru"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/command pass-request-id",
 			"event": [
 				{
@@ -281,6 +340,64 @@
 					"path": [
 						"api",
 						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/passthru generate-request-id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-request-id is present and valid\", function () {\r",
+							"    pm.response.to.have.header(\"x-request-id\");\r",
+							"    const requestId = pm.response.headers.get(\"x-request-id\");\r",
+							"\r",
+							"    const regex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89ABab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;\r",
+							"    pm.expect(requestId).to.match(regex)\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{auth}}"
+					},
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{apikey}}"
+					},
+					{
+						"key": "x-request-id",
+						"type": "text",
+						"value": "my-request-id",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/passthru",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"passthru"
 					]
 				}
 			},

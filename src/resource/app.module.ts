@@ -6,8 +6,8 @@ import {
   LoggerModuleConfig,
   OpenTelemetryModuleConfig,
   RequestContextMiddleware,
+  RequestContextModule,
 } from '../infrastructure';
-import {RequestContextModule} from '../infrastructure/request-context.module';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 
