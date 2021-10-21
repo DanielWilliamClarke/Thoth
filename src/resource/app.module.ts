@@ -1,4 +1,10 @@
-import {Logger, MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
+import {
+  DynamicModule,
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import {context, trace} from '@opentelemetry/api';
 import * as addRequestIdMiddleware from 'express-request-id';
 import {DomainModule} from '../domain';
@@ -26,28 +32,45 @@ const logFormatter = (object: any): any => {
   };
 };
 
-@Module({
-  imports: [
-    TracingModule.forRoot({interval: 1000}),
+type AppOptions = {
+  runTracer: boolean;
+  runLogger: boolean;
+  runAspect: boolean;
+};
 
-    RequestLoggerModule.forRoot({
-      formatter: logFormatter, // Monkey patch in log formatter
-      redactPaths: [
-        'req.headers.authorization',
-        'req.headers["x-api-key"]',
-        'res.headers.etag',
-      ],
-      logPath: process.env.LOG_FILE_NAME,
-    }),
-
-    AspectModule.forRoot({logger: new Logger('ASPECT LOGGER')}),
-
-    DomainModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService, Logger],
-})
+@Module({})
 export class AppModule implements NestModule {
+  static async forRoot(options: AppOptions): Promise<DynamicModule> {
+    const imports = [];
+
+    if (options.runTracer) {
+      imports.push(TracingModule.forRoot({interval: 1000}));
+    }
+    if (options.runLogger) {
+      imports.push(
+        RequestLoggerModule.forRoot({
+          formatter: logFormatter, // Monkey patch in log formatter
+          redactPaths: [
+            'req.headers.authorization',
+            'req.headers["x-api-key"]',
+            'res.headers.etag',
+          ],
+          logPath: process.env.LOG_FILE_NAME,
+        })
+      );
+    }
+    if (options.runAspect) {
+      imports.push(AspectModule.forRoot({logger: new Logger('ASPECT LOGGER')}));
+    }
+
+    return {
+      module: AppModule,
+      imports: [...imports, DomainModule],
+      controllers: [AppController],
+      providers: [AppService, Logger],
+    };
+  }
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       // here addRequestIdMiddleware must be before RequestContextMiddleware to allow
