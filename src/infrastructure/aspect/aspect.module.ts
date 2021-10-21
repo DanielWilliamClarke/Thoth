@@ -1,5 +1,5 @@
 import {DynamicModule, Module} from '@nestjs/common';
-import {AspectLoggerService, ILogger} from './aspect.service';
+import {AspectLogger, ILogger} from './aspect-logger';
 
 type AspectOptions = {
   logger: ILogger;
@@ -8,11 +8,9 @@ type AspectOptions = {
 @Module({})
 export class AspectModule {
   static forRoot(config: AspectOptions): DynamicModule {
-    AspectLoggerService.logger = config.logger;
+    AspectLogger.logger = config.logger;
     return {
       module: AspectModule,
-      providers: [AspectLoggerService],
-      exports: [AspectLoggerService],
     };
   }
 }
