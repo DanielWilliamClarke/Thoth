@@ -9,7 +9,7 @@ import {
 import {RequestContextModule} from '../infrastructure';
 
 @Module({
-  imports: [HttpModule, RequestContextModule],
+  imports: [RequestContextModule],
   providers: [
     Logger,
     CommandService,

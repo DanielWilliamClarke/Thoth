@@ -6,7 +6,7 @@ import {HttpModule, HttpService} from '@nestjs/axios';
 @Module({
   imports: [HttpModule],
   providers: [RequestContextMiddleware, RequestContextService, Logger],
-  exports: [RequestContextMiddleware, RequestContextService],
+  exports: [RequestContextMiddleware, RequestContextService, HttpModule],
 })
 export class RequestContextModule implements OnModuleInit {
   constructor(
