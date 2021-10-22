@@ -20,7 +20,7 @@ Aspectjs Contextual Logging POC
 
 ## Main Deliverables
 
-This project culminates in the amalagmation of 4 technologies:
+This project culminates in the amalgamation of 4 technologies:
 
 - AspectJS <https://github.com/mgechev/aspect.js>
 - NestJS-Pino <https://github.com/iamolegga/nestjs-pino>
