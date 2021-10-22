@@ -1,5 +1,5 @@
 import {NestFactory} from '@nestjs/core';
-import {Logger} from 'nestjs-pino';
+import {Logger as PinoLogger} from 'nestjs-pino';
 import {AppModule} from './app.module';
 
 async function bootstrap() {
@@ -14,7 +14,7 @@ async function bootstrap() {
   });
 
   if (appOptions.runLogger) {
-    app.useLogger(app.get(Logger));
+    app.useLogger(app.get(PinoLogger));
   }
 
   await app.listen(5555);
