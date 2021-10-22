@@ -132,7 +132,7 @@ curl -H "X-Request-Id: your-x-request-id" localhost:5555/api/command
 # Trigger an error that is caught and logged internally
 curl -H "X-Request-Id: your-x-request-id" localhost:5555/api/throw
 
-# Trigger an error that is caught and logged internally
+# Internally /api is called and its response is returned
 curl -H "X-Request-Id: your-x-request-id" localhost:5555/api/passthru
 # Hello World!
 ```
