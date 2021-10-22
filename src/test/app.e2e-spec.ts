@@ -11,8 +11,8 @@ describe('AppController (e2e)', () => {
       imports: [
         AppModule.forRoot({
           runTracer: false,
-          runLogger: true,
-          runAspect: true,
+          runLogger: false,
+          runAspect: false,
         }),
       ],
     }).compile();

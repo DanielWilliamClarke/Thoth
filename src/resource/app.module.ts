@@ -50,12 +50,12 @@ export class AppModule implements NestModule {
       imports.push(
         RequestLoggerModule.forRoot({
           formatter: logFormatter, // Monkey patch in log formatter
+          logPath: process.env.LOG_FILE_NAME,
           redactPaths: [
             'req.headers.authorization',
             'req.headers["x-api-key"]',
             'res.headers.etag',
           ],
-          logPath: process.env.LOG_FILE_NAME,
         })
       );
     }
