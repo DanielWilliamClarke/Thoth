@@ -8,13 +8,15 @@ Contextual Logging POC
 
 - [🏜️ Thoth](#️-thoth)
   - [Main Deliverables](#main-deliverables)
+  - [Provided Infrastructure](#provided-infrastructure)
   - [Things to consider](#things-to-consider)
   - [References](#references)
   - [Service Build and Test](#service-build-and-test)
+  - [Generating Traffic](#generating-traffic)
+    - [Curl](#curl)
+    - [Postman](#postman)
   - [Observability Stack](#observability-stack)
-  - [Provided Infrastructure](#provided-infrastructure)
-    - [Visualise logs within Grafana](#visualise-logs-within-grafana)
-  - [Postman](#postman)
+    - [Visualize logs within Grafana](#visualize-logs-within-grafana)
   - [Expected logs for api/command endpoint](#expected-logs-for-apicommand-endpoint)
   - [Extraction and pass through of X-Request-Id](#extraction-and-pass-through-of-x-request-id)
 
@@ -22,10 +24,10 @@ Contextual Logging POC
 
 This project culminates in the amalgamation of 4 technologies:
 
-- AspectJS <https://github.com/mgechev/aspect.js>
-- NestJS-Pino <https://github.com/iamolegga/nestjs-pino>
-- Opentelemetry <https://github.com/pragmaticivan/nestjs-otel>
-- AsyncLocalStorage <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
+- **AspectJS** <https://github.com/mgechev/aspect.js>
+- **NestJS-Pino** <https://github.com/iamolegga/nestjs-pino>
+- **Opentelemetry** <https://github.com/pragmaticivan/nestjs-otel>
+- **AsyncLocalStorage** <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
 
 To realise 4 drop in modules:
 
@@ -35,6 +37,21 @@ To realise 4 drop in modules:
 - `RequestContextModule` - Providing request and response interception middleware and services to allow access to the mainline request context at any level of the application
 
 In this application these drop in modules can be turned off via the flags present in the `AppOptions` object required by the `AppModule`
+
+## Provided Infrastructure
+
+- **Thoth Service**
+  - <http://localhost:5555/api> - Hello World!
+  - <http://localhost:5555/api/command> - returns JSON
+  - <http://localhost:5555/api/throw> - Internally throws and error and catches it
+  - <http://localhost:5555/api/passthru> - Internally calls root endpoint to demonstrate request context access
+- **Grafana** - Open source analytics & monitoring solution for every database. - <https://grafana.com/>
+  - <http://localhost:3000>
+- **Prometheus** - Monitoring and time series database - <https://prometheus.io/>
+  - <http://localhost:9090>
+- **Loki** - Log aggregator -  <https://grafana.com/oss/loki/>
+  - <http://localhost:3101>
+  - <http://loki:3100> inside docker network
 
 ## Things to consider
 
@@ -49,16 +66,16 @@ In this application these drop in modules can be turned off via the flags presen
 
 ## References
 
-- NestJS Pino - Platform agnostic logger for NestJS based on Pino with REQUEST CONTEXT IN EVERY LOG - <https://github.com/iamolegga/nestjs-pino>
-- AspectJS - Library for aspect-oriented programming with JavaScript, which takes advantage of ECMAScript 2016 decorators syntax - <https://github.com/mgechev/aspect.js>
-- express-request-id - Generate UUID for request and add it to X-Request-Id header. In case request contains X-Request-Id header, uses its value instead - <https://www.npmjs.com/package/express-request-id>
-- nestjs-otel - OpenTelemetry module for Nest. - <https://github.com/pragmaticivan/nestjs-otel>
-- Observability Whitepaper <https://github.com/cncf/tag-observability/blob/main/whitepaper.md>
-- pino-http - High-speed HTTP logger for Node.js - <https://github.com/pinojs/pino-http#pinohttplogger-plogger>
+- **NestJS Pino** - Platform agnostic logger for NestJS based on Pino with REQUEST CONTEXT IN EVERY LOG - <https://github.com/iamolegga/nestjs-pino>
+- **AspectJS** - Library for aspect-oriented programming with JavaScript, which takes advantage of ECMAScript 2016 decorators syntax - <https://github.com/mgechev/aspect.js>
+- **express-request-id** - Generate UUID for request and add it to X-Request-Id header. In case request contains X-Request-Id header, uses its value instead - <https://www.npmjs.com/package/express-request-id>
+- **nestjs-otel** - OpenTelemetry module for Nest. - <https://github.com/pragmaticivan/nestjs-otel>
+- **Observability** Whitepaper <https://github.com/cncf/tag-observability/blob/main/whitepaper.md>
+- **pino-http** - High-speed HTTP logger for Node.js - <https://github.com/pinojs/pino-http#pinohttplogger-plogger>
   - logger options <https://github.com/pinojs/pino/blob/HEAD/docs/api.md#options>
   - redaction <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
     - path syntax <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
-- AsyncLocalStorage - Each instance of AsyncLocalStorage maintains an independent storage context. Multiple instances can safely exist simultaneously without risk of interfering with each other data. - <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
+- **AsyncLocalStorage** - Each instance of AsyncLocalStorage maintains an independent storage context. Multiple instances can safely exist simultaneously without risk of interfering with each other data. - <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
   - Request Context Middleware based on <https://gist.github.com/bengry/924a9b93c25d8a98bffdfc0a847f0dbe>
 
 ## Service Build and Test
@@ -77,6 +94,10 @@ npm run fix
 // Test
 npm run test:e2e
 ```
+
+## Generating Traffic
+
+### Curl
 
 Once the service is running you can make requests to it with curl
 
@@ -118,54 +139,41 @@ curl -H "X-Request-Id: your-x-request-id" localhost:5555/api/passthru
 
 if no X-Request-Id is provided this service will generate one to be available in the response headers (see below for details)
 
+### Postman
+
+- You can import the provided postman collection and environment into postman to facilitate generating substantial traffic against the Thoth service, as well as to validate expected behavior and `x-request-id` header pass through / generation
+- See `/e2e` and <https://learning.postman.com/docs/getting-started/importing-and-exporting-data/> for details
+
 ## Observability Stack
 
-You can start the Prometheus + Grafana + Tempo + Loki Observability Stack by running
+You can start the `Prometheus` + `Grafana` + `Tempo` + `Loki` Observability Stack and visualize logs by running
 
 ```bash
 docker-compose up --build
 ```
 
-this will build the `Thoth` service and then deploy it along with the Prometheus, Grafana, Tempo and Loki
-
-## Provided Infrastructure
-
-- Thoth Service
-  - <http://localhost:5555/api> - Hello World!
-  - <http://localhost:5555/api/command> - returns JSON
-  - <http://localhost:5555/api/throw> - Internally throws and error and catches it
-  - <http://localhost:5555/api/passthru> - Internally calls root endpoint to demonstrate request context access
-- Grafana - Open source analytics & monitoring solution for every database. - <http://localhost:3000>
-  - <https://grafana.com/>
-- Prometheus - Monitoring and time series database - <http://localhost:9090>
-  - <https://prometheus.io/>
-- Loki - Log aggregator - <http://localhost:3101> / internally in docker network - <http://loki:3100> 
-  - <https://grafana.com/oss/loki/>
+this will build the `Thoth` service and then deploy it along with the `Prometheus`, `Grafana`, `Tempo` and `Loki`
   
-### Visualise logs within Grafana
+### Visualize logs within Grafana
 
-- Navigate to <http://localhost:3000> to open `Grafana`
-- Open `Settings`
-- Add data source and search `Loki`
-- Set the URL to <http://loki:3100> and hit `save and test` -> should be successful
-- Open `Explore`
-- Using the top level dropdown set the Datasource to `Loki`
-- In the `Log Brower` text input type `{filename="/thoth/logs/thoth.log"}`
-- Hit `Run Query`
+1. Navigate to <http://localhost:3000> to open `Grafana`
+1. Open `Settings`
+1. Add data source and search `Loki`
+1. Set the URL to <http://loki:3100> and hit `save and test` -> should be successful
+1. Open `Explore`
+1. Using the top level dropdown set the Datasource to `Loki`
+1. In the `Log Brower` text input type `{filename="/thoth/logs/thoth.log"}`
+1. Hit `Run Query`
 
 You should then be able to see and explore logs generated by the Thoth service.
 
 >Logs generated by the `Thoth` service when running with the stack are funneled to a log file `/data/logs/thoth.log` for consumption
 when running standalone via `npm run start` logs are dumped to the console.
-## Postman
-
-- You can import the provided postman collection and environment into postman to facilitate generating traffic against the Thoth service, as well as to validate expected behavior and `x-request-id` header pass through / generation
-- See `/e2e` and <https://learning.postman.com/docs/getting-started/importing-and-exporting-data/> for details
 
 ## Expected logs for api/command endpoint
 
 ```JSON
-// curl -H "Authorization: some-key" -H "x-api-key: asdasdfasd" http://localhost:5555/api/command
+// curl -H "Authorization: some-key" -H "x-api-key: aaaaaaaaaaaa" http://localhost:5555/api/command
 // {"some":"useful","data":"which","we":"need","something":"that","I":"need","To":"Find"}
 {
     // pid and hostname are removed in this example
