@@ -1,8 +1,6 @@
 import {DynamicModule, Module} from '@nestjs/common';
 import {LoggerModule} from 'nestjs-pino';
 
-import * as fs from 'fs';
-
 import pino from 'pino';
 
 type LoggerModuleOptions = {
