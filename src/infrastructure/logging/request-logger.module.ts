@@ -1,25 +1,59 @@
 import {DynamicModule, Module} from '@nestjs/common';
-import {createStream} from '@binxhealth/pino-stackdriver';
 import {LoggerModule} from 'nestjs-pino';
 
-import Pino from 'pino';
+import * as fs from 'fs';
+
+import pino from 'pino';
 
 type LoggerModuleOptions = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formatter: (object: any) => any;
   redactPaths: string[];
   logPath: string;
+  addSeverity: boolean;
+};
+
+const logLevels = ['log', 'debug', 'error', 'warn'];
+
+const SeverityLookup = {
+  default: 'DEFAULT',
+  silly: 'DEFAULT',
+  verbose: 'DEBUG',
+  debug: 'DEBUG',
+  http: 'notice',
+  info: 'INFO',
+  warn: 'WARNING',
+  error: 'ERROR',
 };
 
 const createLoggerOptions = (options: LoggerModuleOptions) => {
+  const logFormatters = logLevels.reduce(
+    (acc, method): Object => ({
+      ...acc,
+      [method]: options.formatter,
+    }),
+    {}
+  );
+
+  const levelFormatters = {
+    level: (label: string, number: number) => {
+      const log = {level: number};
+      if (!options.addSeverity) {
+        return log;
+      }
+
+      return {
+        severity: SeverityLookup[label] || SeverityLookup['info'],
+        ...log,
+      };
+    },
+  };
+
   return {
-    formatters: ['log', 'debug', 'error', 'warn'].reduce(
-      (acc, method): Object => {
-        acc[method] = options.formatter;
-        return acc;
-      },
-      {}
-    ),
+    formatters: {
+      ...logFormatters,
+      ...levelFormatters,
+    },
     base: undefined,
     redact: {
       paths: options.redactPaths,
@@ -37,15 +71,16 @@ export class RequestLoggerModule {
         LoggerModule.forRoot({
           pinoHttp: [
             {
-              logger: Pino(
+              logger: pino(
                 createLoggerOptions(options),
-                options.logPath ? Pino.destination(options.logPath) : undefined
+                options.logPath
+                  ? pino.destination(options.logPath)
+                  : process.stdout
               ),
             },
-            createStream(),
           ],
         }),
-      ]
+      ],
     };
   }
 }

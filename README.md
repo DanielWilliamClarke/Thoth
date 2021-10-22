@@ -7,8 +7,9 @@
 Aspectjs Contextual Logging POC
 
 - [🏜️ Thoth](#️-thoth)
-  - [References](#references)
+  - [Main Deliverables](#main-deliverables)
   - [Things to consider](#things-to-consider)
+  - [References](#references)
   - [Service Build and Test](#service-build-and-test)
   - [Observability Stack](#observability-stack)
   - [Provided Infrastructure](#provided-infrastructure)
@@ -17,20 +18,23 @@ Aspectjs Contextual Logging POC
   - [Expected logs for api/command endpoint](#expected-logs-for-apicommand-endpoint)
   - [Extraction and pass through of X-Request-Id](#extraction-and-pass-through-of-x-request-id)
 
-## References
+## Main Deliverables
 
-- NestJS Pino - Platform agnostic logger for NestJS based on Pino with REQUEST CONTEXT IN EVERY LOG - <https://github.com/iamolegga/nestjs-pino>
-- AspectJS - Library for aspect-oriented programming with JavaScript, which takes advantage of ECMAScript 2016 decorators syntax - <https://github.com/mgechev/aspect.js>
-- express-request-id - Generate UUID for request and add it to X-Request-Id header. In case request contains X-Request-Id header, uses its value instead - <https://www.npmjs.com/package/express-request-id>
-- pino-stackdriver - A utility that makes express-pino logs StackDriver-compatible - <https://github.com/binxhealth/pino-stackdriver>
-- nestjs-otel - OpenTelemetry module for Nest. - <https://github.com/pragmaticivan/nestjs-otel>
-- Observability Whitepaper <https://github.com/cncf/tag-observability/blob/main/whitepaper.md>
-- pino-http - High-speed HTTP logger for Node.js - <https://github.com/pinojs/pino-http#pinohttplogger-plogger>
-  - logger options <https://github.com/pinojs/pino/blob/HEAD/docs/api.md#options>
-  - redaction <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
-    - path syntax <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
-- AsyncLocalStorage - Each instance of AsyncLocalStorage maintains an independent storage context. Multiple instances can safely exist simultaneously without risk of interfering with each other data. - <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
-  - Request Context Middleware based on <https://gist.github.com/bengry/924a9b93c25d8a98bffdfc0a847f0dbe>
+This project culminates in the amalagmation of 4 technologies:
+
+- AspectJS <https://github.com/mgechev/aspect.js>
+- NestJS-Pino <https://github.com/iamolegga/nestjs-pino>
+- Opentelemetry <https://github.com/pragmaticivan/nestjs-otel>
+- AsyncLocalStorage <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
+
+To realise 4 drop in modules:
+
+- `AspectModule` - Providing non intrusive application logging
+- `RequestLoggingModule` - Providing JSON formatted logging containing request context in every log
+- `TracingModule` - Providing opentelemtry based request tracing and log forwarding to the Observability stack
+- `RequestContextModule` - Providing request and response interception middleware and services to allow access to the mainline request context at any level of the application
+
+In this application these drop in modules can be turned off via the flags present in the `AppOptions` object required by the `AppModule`
 
 ## Things to consider
 
@@ -39,9 +43,23 @@ Aspectjs Contextual Logging POC
 - [x] how to log spanid and traceid in logs
 - [x] Access request context cleanly outside of `AppController`
 - [x] Need to ensure our usage of AsyncLocalStorage is thread safe
-- [ ] Stackdriver compatibility stream not compatible with standard file stream
+- [x] Logs have Stackdriver compatibile attributes
 - [ ] Are we performing semantic logging properly?
 - [ ] Determine the correct attributes to log
+
+## References
+
+- NestJS Pino - Platform agnostic logger for NestJS based on Pino with REQUEST CONTEXT IN EVERY LOG - <https://github.com/iamolegga/nestjs-pino>
+- AspectJS - Library for aspect-oriented programming with JavaScript, which takes advantage of ECMAScript 2016 decorators syntax - <https://github.com/mgechev/aspect.js>
+- express-request-id - Generate UUID for request and add it to X-Request-Id header. In case request contains X-Request-Id header, uses its value instead - <https://www.npmjs.com/package/express-request-id>
+- nestjs-otel - OpenTelemetry module for Nest. - <https://github.com/pragmaticivan/nestjs-otel>
+- Observability Whitepaper <https://github.com/cncf/tag-observability/blob/main/whitepaper.md>
+- pino-http - High-speed HTTP logger for Node.js - <https://github.com/pinojs/pino-http#pinohttplogger-plogger>
+  - logger options <https://github.com/pinojs/pino/blob/HEAD/docs/api.md#options>
+  - redaction <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
+    - path syntax <https://github.com/pinojs/pino/blob/b48f63581d5d9fb70141632520e1a44d58f34758/docs/redaction.md#paths>
+- AsyncLocalStorage - Each instance of AsyncLocalStorage maintains an independent storage context. Multiple instances can safely exist simultaneously without risk of interfering with each other data. - <https://nodejs.org/api/async_context.html#async_context_new_asynclocalstorage>
+  - Request Context Middleware based on <https://gist.github.com/bengry/924a9b93c25d8a98bffdfc0a847f0dbe>
 
 ## Service Build and Test
 

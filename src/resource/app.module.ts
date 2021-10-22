@@ -21,9 +21,11 @@ import {AppService} from './app.service';
 const logFormatter = (object: any): any => {
   const span = trace.getSpan(context.active());
   if (!span) return {...object};
+
   const {spanId, traceId, traceFlags} = trace
     .getSpan(context.active())
     ?.spanContext();
+
   return {
     ...object,
     spanId,
@@ -50,6 +52,7 @@ export class AppModule implements NestModule {
       imports.push(
         RequestLoggerModule.forRoot({
           formatter: logFormatter, // Monkey patch in log formatter
+          addSeverity: true,
           logPath: process.env.LOG_FILE_NAME,
           redactPaths: [
             'req.headers.authorization',
