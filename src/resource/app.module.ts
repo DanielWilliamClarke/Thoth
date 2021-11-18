@@ -28,8 +28,8 @@ const logFormatter = (object: any): any => {
 
   return {
     ...object,
-    spanId,
-    traceId,
+    spanID: spanId,
+    traceID: traceId,
     traceFlags,
   };
 };

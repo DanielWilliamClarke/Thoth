@@ -1,6 +1,7 @@
 FROM node:16.9-alpine
 
-RUN apk add --update 
+RUN apk add --update && \
+    npm install -g npm@8.1.3
 
 WORKDIR /thoth
 

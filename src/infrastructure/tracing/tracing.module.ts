@@ -1,14 +1,13 @@
 import {DynamicModule, Module} from '@nestjs/common';
 import {OpenTelemetryModule} from 'nestjs-otel';
-import {Tracer, TracerOptions} from './tracer';
 import * as process from 'process';
+
+import {Tracer, TracerOptions} from './tracer';
 
 @Module({})
 export class TracingModule {
   static async forRoot(options: TracerOptions): Promise<DynamicModule> {
     const tracer = Tracer.build(options);
-    await tracer.start();
-
     // You can also use the shutdown method to gracefully shut down the SDK before process shutdown
     // or on some operating system signal.
     process.on('SIGTERM', () => {
@@ -21,6 +20,8 @@ export class TracingModule {
         // eslint-disable-next-line no-process-exit
         .finally(() => process.exit(0));
     });
+
+    await tracer.start();
 
     return {
       module: TracingModule,
