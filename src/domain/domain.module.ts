@@ -1,5 +1,4 @@
 import {Module, Logger} from '@nestjs/common';
-import {HttpModule} from '@nestjs/axios';
 import {
   CommandService,
   RepositoryService,
@@ -7,6 +6,7 @@ import {
   ClientAPIService,
 } from '.';
 import {RequestContextModule} from '../infrastructure';
+import {TraceService} from 'nestjs-otel';
 
 @Module({
   imports: [RequestContextModule],
@@ -16,6 +16,7 @@ import {RequestContextModule} from '../infrastructure';
     RepositoryService,
     DataAccessService,
     ClientAPIService,
+    TraceService,
   ],
   exports: [CommandService, ClientAPIService],
 })
