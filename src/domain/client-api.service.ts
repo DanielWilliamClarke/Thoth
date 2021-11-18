@@ -6,7 +6,9 @@ import {Logger} from '@nestjs/common';
 import {firstValueFrom} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {AxiosResponse} from 'axios';
-import { OtelMethodCounter, Span, TraceService } from 'nestjs-otel';
+import {OtelMethodCounter, TraceService} from 'nestjs-otel';
+import {ThothSpan} from '../infrastructure';
+
 @Injectable()
 @Advised()
 export class ClientAPIService {
@@ -16,7 +18,7 @@ export class ClientAPIService {
     private readonly traceService: TraceService
   ) {}
 
-  @Span('CLIENT-API-GET')
+  @ThothSpan('CLIENT-API-GET')
   @OtelMethodCounter()
   async Get(): Promise<string> {
     this.logger.log('calling /api on self');

@@ -1,8 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Advised } from 'aspect.js';
-import { Span } from 'nestjs-otel';
+import {Injectable, Logger} from '@nestjs/common';
+import {Advised} from 'aspect.js';
+import {ThothSpan} from '../infrastructure';
 
-import { ClientAPIService, CommandService, ReturnPayload } from '../domain';
+import {ClientAPIService, CommandService, ReturnPayload} from '../domain';
 
 @Injectable()
 @Advised()
@@ -13,12 +13,12 @@ export class AppService {
     private readonly logger: Logger
   ) {}
 
-  @Span('GET-HELLO-SERVICE')
+  @ThothSpan('GET-HELLO-SERVICE')
   getHello(): string {
     return 'Hello World!';
   }
 
-  @Span('RUN-COMMAND-SERVICE')
+  @ThothSpan('RUN-COMMAND-SERVICE')
   runCommand(): ReturnPayload {
     return this.command.DoThing({
       data: 'Complex query string',
@@ -30,7 +30,7 @@ export class AppService {
     });
   }
 
-  @Span('RUN-THROW-SERVICE')
+  @ThothSpan('RUN-THROW-SERVICE')
   runThrow(): void {
     try {
       this.command.DoThrow();
@@ -39,7 +39,7 @@ export class AppService {
     }
   }
 
-  @Span('PASS-THRU-SERVICE')
+  @ThothSpan('PASS-THRU-SERVICE')
   async passthru(): Promise<string> {
     return await this.clientApi.Get();
   }

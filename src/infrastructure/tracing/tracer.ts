@@ -1,4 +1,3 @@
-
 import {getNodeAutoInstrumentations} from '@opentelemetry/auto-instrumentations-node';
 import {AsyncLocalStorageContextManager} from '@opentelemetry/context-async-hooks';
 import {
