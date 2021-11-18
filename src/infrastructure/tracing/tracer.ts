@@ -21,7 +21,7 @@ export class Tracer {
   public static build(options: TracerOptions): NodeSDK {
     return new NodeSDK({
       metricExporter: new PrometheusExporter({
-        port: 8081,
+        port: 9090,
       }),
       metricInterval: options.interval,
       spanProcessor: new BatchSpanProcessor(new JaegerExporter()),
