@@ -19,26 +19,29 @@ export function ThothSpan(name: string): MethodDecorator {
   ) {
     descriptor.value = wrap(
       `${name}_${String(propertyKey)}`.toUpperCase(),
-      descriptor.value);
+      descriptor.value
+    );
   };
 }
 
 export function ThothApplySpans(): ClassDecorator {
   // eslint-disable-next-line @typescript-eslint/ban-types
   return function <TFunction extends Function>(target: TFunction) {
-    const descriptors = Object.getOwnPropertyDescriptors(target.prototype);
-    for (const [propertyName, descriptor] of Object.entries(descriptors)) {
-      const isMethod =
-        typeof descriptor.value === 'function' &&
-        propertyName !== 'constructor';
-      if (!isMethod) {
-        continue;
-      }
+    Object.entries(Object.getOwnPropertyDescriptors(target.prototype)).forEach(
+      ([propertyName, descriptor]) => {
+        const isMethod =
+          typeof descriptor.value === 'function' &&
+          propertyName !== 'constructor';
+        if (!isMethod) {
+          return;
+        }
 
-      descriptor.value = wrap(
-        `${target.name}_${String(propertyName)}`.toUpperCase(),
-        descriptor.value);
-      Object.defineProperty(target.prototype, propertyName, descriptor);
-    }
+        descriptor.value = wrap(
+          `${target.name}_${String(propertyName)}`.toUpperCase(),
+          descriptor.value
+        );
+        Object.defineProperty(target.prototype, propertyName, descriptor);
+      }
+    );
   };
 }

@@ -1,5 +1,7 @@
-import {Injectable, NestMiddleware} from '@nestjs/common';
-import {RequestContext} from './request-context.model';
+import { Injectable, NestMiddleware } from '@nestjs/common';
+
+import { ThothApplySpans } from '../../infrastructure';
+import { RequestContext } from './request-context.model';
 
 /**
  * This is needed to side-step Nest.js, which doesn't support getting the current execution context (i.e. Request) that's
@@ -9,6 +11,7 @@ import {RequestContext} from './request-context.model';
  * This solution is taken from https://github.com/nestjs/nest/issues/699#issuecomment-405868782.
  */
 @Injectable()
+@ThothApplySpans()
 export class RequestContextMiddleware
   implements NestMiddleware<Request, Response>
 {

@@ -1,5 +1,6 @@
-import {Injectable} from '@nestjs/common';
-import {RequestContext} from './request-context.model';
+import { Injectable } from '@nestjs/common';
+
+import { RequestContext } from './request-context.model';
 
 @Injectable()
 export class RequestContextService {
