@@ -1,36 +1,37 @@
-import {Controller, Get} from '@nestjs/common';
-import {OtelMethodCounter} from 'nestjs-otel';
-import {ThothSpan} from '../infrastructure';
-import {ReturnPayload} from 'src/domain';
-import {AppService} from './app.service';
+import { Controller, Get } from '@nestjs/common';
+import { OtelMethodCounter } from 'nestjs-otel';
+import { ReturnPayload } from 'src/domain';
+
+import { ThothSpan } from '../infrastructure';
+import { AppService } from './app.service';
 
 @Controller('api')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  @ThothSpan('GET-HELLO')
+  @ThothSpan('CONTROLLER')
   @OtelMethodCounter()
   getHello(): string {
     return this.appService.getHello();
   }
 
   @Get('command')
-  @ThothSpan('RUN-COMMAND')
+  @ThothSpan('CONTROLLER')
   @OtelMethodCounter()
   runCommand(): ReturnPayload {
     return this.appService.runCommand();
   }
 
   @Get('throw')
-  @ThothSpan('RUN-THROW')
+  @ThothSpan('CONTROLLER')
   @OtelMethodCounter()
   runThrow(): void {
     this.appService.runThrow();
   }
 
   @Get('passthru')
-  @ThothSpan('PASS-THRU')
+  @ThothSpan('CONTROLLER')
   @OtelMethodCounter()
   async passthru(): Promise<string> {
     return await this.appService.passthru();

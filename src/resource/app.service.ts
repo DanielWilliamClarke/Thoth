@@ -1,11 +1,12 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {Advised} from 'aspect.js';
-import {ThothSpan} from '../infrastructure';
 
 import {ClientAPIService, CommandService, ReturnPayload} from '../domain';
+import {ThothApplySpans} from '../infrastructure';
 
 @Injectable()
 @Advised()
+@ThothApplySpans()
 export class AppService {
   constructor(
     private readonly command: CommandService,
@@ -13,12 +14,10 @@ export class AppService {
     private readonly logger: Logger
   ) {}
 
-  @ThothSpan('GET-HELLO-SERVICE')
   getHello(): string {
     return 'Hello World!';
   }
 
-  @ThothSpan('RUN-COMMAND-SERVICE')
   runCommand(): ReturnPayload {
     return this.command.DoThing({
       data: 'Complex query string',
@@ -30,7 +29,6 @@ export class AppService {
     });
   }
 
-  @ThothSpan('RUN-THROW-SERVICE')
   runThrow(): void {
     try {
       this.command.DoThrow();
@@ -39,7 +37,6 @@ export class AppService {
     }
   }
 
-  @ThothSpan('PASS-THRU-SERVICE')
   async passthru(): Promise<string> {
     return await this.clientApi.Get();
   }

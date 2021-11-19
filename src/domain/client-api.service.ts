@@ -1,16 +1,17 @@
-import {HttpService} from '@nestjs/axios';
-import {Injectable} from '@nestjs/common';
-import {Advised} from 'aspect.js';
-import {Logger} from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { Advised } from 'aspect.js';
+import { AxiosResponse } from 'axios';
+import { OtelMethodCounter, TraceService } from 'nestjs-otel';
+import { firstValueFrom } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import {firstValueFrom} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {AxiosResponse} from 'axios';
-import {OtelMethodCounter, TraceService} from 'nestjs-otel';
-import {ThothSpan} from '../infrastructure';
+import { ThothApplySpans } from '../infrastructure';
 
 @Injectable()
 @Advised()
+@ThothApplySpans()
 export class ClientAPIService {
   constructor(
     private readonly logger: Logger,
@@ -18,7 +19,6 @@ export class ClientAPIService {
     private readonly traceService: TraceService
   ) {}
 
-  @ThothSpan('CLIENT-API-GET')
   @OtelMethodCounter()
   async Get(): Promise<string> {
     this.logger.log('calling /api on self');

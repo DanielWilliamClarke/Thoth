@@ -1,5 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Span} from 'nestjs-otel';
+import { Span } from 'nestjs-otel';
+
+const wrap = (name: string, method: any): ((...args: any[]) => any) => {
+  class Wrapper {
+    @Span(name)
+    static unwrap(...args: any[]): any {
+      return method.apply(this, args);
+    }
+  }
+  return Wrapper.unwrap;
+};
 
 export function ThothSpan(name: string): MethodDecorator {
   return function (
@@ -7,15 +17,28 @@ export function ThothSpan(name: string): MethodDecorator {
     propertyKey: string | symbol,
     descriptor: PropertyDescriptor
   ) {
-    const cb = descriptor.value;
+    descriptor.value = wrap(
+      `${name}_${String(propertyKey)}`.toUpperCase(),
+      descriptor.value);
+  };
+}
 
-    class SpanWrapper {
-      @Span(`${name}_${String(propertyKey)}`)
-      static unwrap(this: any, ...args: any[]): any {
-        return cb.apply(this, args);
+export function ThothApplySpans(): ClassDecorator {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  return function <TFunction extends Function>(target: TFunction) {
+    const descriptors = Object.getOwnPropertyDescriptors(target.prototype);
+    for (const [propertyName, descriptor] of Object.entries(descriptors)) {
+      const isMethod =
+        typeof descriptor.value === 'function' &&
+        propertyName !== 'constructor';
+      if (!isMethod) {
+        continue;
       }
-    }
 
-    descriptor.value = SpanWrapper.unwrap;
+      descriptor.value = wrap(
+        `${target.name}_${String(propertyName)}`.toUpperCase(),
+        descriptor.value);
+      Object.defineProperty(target.prototype, propertyName, descriptor);
+    }
   };
 }
