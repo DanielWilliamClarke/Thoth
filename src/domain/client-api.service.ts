@@ -7,11 +7,11 @@ import { OtelMethodCounter, TraceService } from 'nestjs-otel';
 import { firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ThothApplySpans } from '../infrastructure';
+import { ThothTraceClass } from '../infrastructure';
 
 @Injectable()
 @Advised()
-@ThothApplySpans()
+@ThothTraceClass
 export class ClientAPIService {
   constructor(
     private readonly logger: Logger,

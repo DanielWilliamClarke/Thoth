@@ -52,6 +52,7 @@
     "aspect.js": "^0.8.1",
     "axios": "^0.23.0",
     "express-request-id": "^1.4.1",
+    "lodash": "^4.17.21",
     "nestjs-otel": "^2.6.1",
     "nestjs-pino": "^2.2.0",
     "pino": "^7.0.3",

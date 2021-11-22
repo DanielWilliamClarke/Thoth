@@ -1,12 +1,12 @@
-import {Injectable, Logger} from '@nestjs/common';
-import {Advised} from 'aspect.js';
+import { Injectable, Logger } from '@nestjs/common';
+import { Advised } from 'aspect.js';
 
-import {ClientAPIService, CommandService, ReturnPayload} from '../domain';
-import {ThothApplySpans} from '../infrastructure';
+import { ClientAPIService, CommandService, ReturnPayload } from '../domain';
+import { ThothTraceClass } from '../infrastructure';
 
 @Injectable()
 @Advised()
-@ThothApplySpans()
+@ThothTraceClass
 export class AppService {
   constructor(
     private readonly command: CommandService,

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { Advised } from 'aspect.js';
 
-import { ThothApplySpans } from '../infrastructure';
+import { ThothTraceClass } from '../infrastructure';
 
 export type ReturnPayload = {
   [K: string]: string;
@@ -10,7 +10,7 @@ export type ReturnPayload = {
 
 @Injectable()
 @Advised()
-@ThothApplySpans()
+@ThothTraceClass
 export class DataAccessService {
   constructor(private readonly logger: Logger) {}
 

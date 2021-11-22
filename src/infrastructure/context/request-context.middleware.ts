@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 
-import { ThothApplySpans } from '../../infrastructure';
+import { ThothTraceClass } from '../../infrastructure';
 import { RequestContext } from './request-context.model';
 
 /**
@@ -11,7 +11,7 @@ import { RequestContext } from './request-context.model';
  * This solution is taken from https://github.com/nestjs/nest/issues/699#issuecomment-405868782.
  */
 @Injectable()
-@ThothApplySpans()
+@ThothTraceClass
 export class RequestContextMiddleware
   implements NestMiddleware<Request, Response>
 {

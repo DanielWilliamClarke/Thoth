@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Advised } from 'aspect.js';
 
-import { ThothApplySpans } from '../infrastructure';
+import { ThothTraceClass } from '../infrastructure';
 import { Payload } from './command.service';
 import { DataAccessService, ReturnPayload } from './dataaccess.service';
 
 @Injectable()
 @Advised()
-@ThothApplySpans()
+@ThothTraceClass
 export class RepositoryService {
   constructor(private readonly dataaccess: DataAccessService) {}
 

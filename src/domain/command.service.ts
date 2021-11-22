@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Advised } from 'aspect.js';
 
-import { ThothApplySpans } from '../infrastructure';
+import { ThothTraceClass } from '../infrastructure';
 import { ReturnPayload } from './dataaccess.service';
 import { RepositoryService } from './repository.service';
 
@@ -13,7 +13,7 @@ export type Payload = {
 
 @Advised()
 @Injectable()
-@ThothApplySpans()
+@ThothTraceClass
 export class CommandService {
   constructor(private readonly respository: RepositoryService) {}
 
