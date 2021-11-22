@@ -1,14 +1,13 @@
-import {DynamicModule, Module} from '@nestjs/common';
-import {LoggerModule} from 'nestjs-pino';
-
+import { DynamicModule, Module } from '@nestjs/common';
+import { LoggerModule } from 'nestjs-pino';
 import pino from 'pino';
 
 type LoggerModuleOptions = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formatter: (object: any) => any;
   redactPaths: string[];
-  logPath: string;
   addSeverity: boolean;
+  logPath?: string;
 };
 
 const logLevels = ['log', 'debug', 'error', 'warn'];

@@ -1,21 +1,11 @@
-import {
-  DynamicModule,
-  Logger,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
-import {context, trace} from '@opentelemetry/api';
+import { DynamicModule, Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { context, trace } from '@opentelemetry/api';
 import * as addRequestIdMiddleware from 'express-request-id';
-import {DomainModule} from '../domain';
-import {
-  RequestLoggerModule,
-  TracingModule,
-  RequestContextMiddleware,
-  AspectModule,
-} from '../infrastructure';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
+
+import { DomainModule } from '../domain';
+import { AspectModule, RequestContextMiddleware, RequestLoggerModule, TracingModule } from '../infrastructure';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const logFormatter = (object: any): any => {
@@ -46,14 +36,18 @@ export class AppModule implements NestModule {
     const imports = [];
 
     if (options.runTracer) {
-      imports.push(TracingModule.forRoot({interval: 1000}));
+      imports.push(
+        TracingModule.forRoot({
+          metricsInterval: 1000,
+          metricsPort: 9090,
+        })
+      );
     }
     if (options.runLogger) {
       imports.push(
         RequestLoggerModule.forRoot({
           formatter: logFormatter, // Monkey patch in log formatter
           addSeverity: true,
-          logPath: process.env.LOG_FILE_NAME,
           redactPaths: [
             'req.headers.authorization',
             'req.headers["x-api-key"]',
