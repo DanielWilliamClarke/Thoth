@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {isFunction} from 'lodash';
-import {Span} from 'nestjs-otel';
+import { Span } from 'nestjs-otel';
+
+import { ClassDecoratorHelpers, GenericMethod } from '../util/class-decorator-helpers';
 
 class TraceUtils {
   static wrap(
     className: string,
     methodName: string,
-    method: any
-  ): (...args: any[]) => any {
+    method: GenericMethod
+  ): GenericMethod {
     class Wrapper {
       @Span(`${className}_${methodName}`.toUpperCase())
       static unwrap(...args: any[]): any {
@@ -19,7 +20,7 @@ class TraceUtils {
 }
 
 export function ThothTraceMethod(
-  target: any,
+  target: {constructor: Function},
   propertyKey: string | symbol,
   descriptor: PropertyDescriptor
 ) {
@@ -30,16 +31,13 @@ export function ThothTraceMethod(
   );
 }
 
-export function ThothTraceClass<TFunction extends Function>(target: TFunction) {
-  Object.entries(Object.getOwnPropertyDescriptors(target.prototype))
-    .filter(
-      ([propertyName, {value}]: [string, any]) =>
-        isFunction(value) && propertyName !== 'constructor'
-    )
-    .forEach(([propertyName, descriptor]: [string, PropertyDescriptor]) =>
-      Object.defineProperty(target.prototype, propertyName, {
-        ...descriptor,
-        value: TraceUtils.wrap(target.name, propertyName, descriptor.value),
-      })
-    );
+export function ThothTraceClass(target: Function) {
+  ClassDecoratorHelpers.wrapAllMethods(
+    target,
+    (
+      name: string,
+      propertyName: string,
+      method: GenericMethod
+    ): GenericMethod => TraceUtils.wrap(name, propertyName, method)
+  );
 }
