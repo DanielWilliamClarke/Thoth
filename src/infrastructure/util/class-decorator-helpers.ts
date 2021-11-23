@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {isFunction} from 'lodash';
 
 export type GenericMethod = (...args: any[]) => any;
 
 export class ClassDecoratorHelpers {
   static wrapAllMethods(
-    target: Function,
+    target: any,
     wrapper: (
       name: string,
       propertyName: string,
