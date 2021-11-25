@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {isFunction} from 'lodash';
+import { isFunction } from 'lodash';
 
 export type GenericMethod = (...args: any[]) => any;
 
@@ -12,7 +12,10 @@ export class ClassDecoratorHelpers {
       method: GenericMethod
     ) => GenericMethod
   ) {
-    Object.entries(Object.getOwnPropertyDescriptors(target.prototype))
+    [
+      ...Object.entries(Object.getOwnPropertyDescriptors(target.prototype)), // Iterate over class methods
+      ...Object.entries(Object.getOwnPropertyDescriptors(target)), // Iterate over static methods
+    ]
       .filter(
         ([propertyName, {value}]: [string, any]) =>
           isFunction(value) && propertyName !== 'constructor'

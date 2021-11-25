@@ -1,9 +1,13 @@
-import { ClassDecoratorHelpers, GenericMethod } from './class-decorator-helpers';
+import {isFunction} from 'lodash';
+
+/* eslint-disable @typescript-eslint/no-empty-function */
+import {ClassDecoratorHelpers, GenericMethod} from './class-decorator-helpers';
 
 describe('ClassDecoratorHelpers', () => {
   it('wrapAllMethods', () => {
     const mockFn = jest.fn();
 
+    const totalMethods = 10;
     class Test {
       do() {}
       ra() {}
@@ -11,7 +15,11 @@ describe('ClassDecoratorHelpers', () => {
       fa() {}
       sol() {}
       la() {}
-      si() {}
+      private si() {}
+
+      static eeny() {}
+      static meeny() {}
+      static mo() {}
     }
 
     ClassDecoratorHelpers.wrapAllMethods(
@@ -29,17 +37,22 @@ describe('ClassDecoratorHelpers', () => {
     );
 
     // Now only a small amount of jank
-    const instance = new Test();
+    Object.entries(Object.getOwnPropertyDescriptors(Test.prototype))
+      .filter(
+        ([propertyName, {value}]: [string, PropertyDescriptor]) =>
+          isFunction(value) && propertyName !== 'constructor'
+      )
+      .reduce(
+        (
+          instance: Test,
+          [propertyName]: [string, PropertyDescriptor]
+        ): Test => {
+          instance[propertyName]();
+          return instance;
+        },
+        new Test()
+      );
 
-    const callableMethods = Object.entries(
-      Object.getOwnPropertyDescriptors(instance)
-    ).filter(
-      ([propertyName]: [string, PropertyDescriptor]) =>
-        propertyName !== 'constructor'
-    );
-
-    callableMethods.forEach(([, {value}]: [string, any]) => value);
-
-    expect(mockFn).toHaveBeenCalledTimes(callableMethods.length);
+    expect(mockFn).toHaveBeenCalledTimes(totalMethods);
   });
 });
