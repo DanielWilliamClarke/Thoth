@@ -13,6 +13,8 @@ import { ThothTraceClass } from '../infrastructure';
 @Advised()
 @ThothTraceClass
 export class ClientAPIService {
+  private passThruChance = 0.4;
+
   constructor(
     private readonly logger: Logger,
     private httpService: HttpService,
@@ -23,7 +25,11 @@ export class ClientAPIService {
   async Get(): Promise<string> {
     this.logger.log('calling /api on self');
 
-    const url = 'http://localhost:5555/api';
+    let url = 'http://localhost:5555/api';
+    if (Math.random() <= this.passThruChance) {
+      url += '/passthru';
+    }
+
     const span = this.traceService.startSpan('CLIENT-API-SUB-SPAN'); // start new span
     span.setAttributes({CUSTOM_DATA: 'TEST'});
     const call$ = this.httpService.get<string>(url).pipe(
