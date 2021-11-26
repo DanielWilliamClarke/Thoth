@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isFunction } from 'lodash';
+import {isFunction} from 'lodash';
 
 export type GenericMethod = (...args: any[]) => any;
 
@@ -11,10 +11,11 @@ type Wrapper = (
 
 export class ClassDecoratorHelpers {
   static wrapAllMethods(target: any, wrapper: Wrapper) {
-    // Wrap class methods
-    new ClassDecoratorHelpers()
-      .applyWrapping(target.prototype, target.name, wrapper) // Class Methods
-      .applyWrapping(target, target.name, wrapper); // Static Methods
+    [target.prototype, target].reduce(
+      (acc: ClassDecoratorHelpers, destination: any) =>
+        acc.applyWrapping(destination, target.name, wrapper),
+      new ClassDecoratorHelpers()
+    );
   }
 
   private applyWrapping(
