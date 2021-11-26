@@ -1,13 +1,15 @@
-import {isFunction} from 'lodash';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import {ClassDecoratorHelpers, GenericMethod} from './class-decorator-helpers';
+
+import { isFunction } from 'lodash';
+
+import { ClassDecoratorHelpers, GenericMethod } from './class-decorator-helpers';
 
 describe('ClassDecoratorHelpers', () => {
   it('wrapAllMethods', () => {
     const mockFn = jest.fn();
 
-    const totalMethods = 10;
+    const totalMockCalls = 10;
     class Test {
       do() {}
       ra() {}
@@ -24,11 +26,7 @@ describe('ClassDecoratorHelpers', () => {
 
     ClassDecoratorHelpers.wrapAllMethods(
       Test,
-      (
-        name: string,
-        propertyName: string,
-        method: GenericMethod
-      ): GenericMethod => {
+      (_1: string, _2: string, method: GenericMethod): GenericMethod => {
         return (...args: any[]): any => {
           method.apply(this, ...args);
           mockFn();
@@ -36,12 +34,14 @@ describe('ClassDecoratorHelpers', () => {
       }
     );
 
-    // Now only a small amount of jank
+    const filterMethods = ([propertyName, {value}]: [
+      string,
+      PropertyDescriptor
+    ]) => isFunction(value) && propertyName !== 'constructor';
+
+    // Call class methods
     Object.entries(Object.getOwnPropertyDescriptors(Test.prototype))
-      .filter(
-        ([propertyName, {value}]: [string, PropertyDescriptor]) =>
-          isFunction(value) && propertyName !== 'constructor'
-      )
+      .filter(filterMethods)
       .reduce(
         (
           instance: Test,
@@ -53,6 +53,13 @@ describe('ClassDecoratorHelpers', () => {
         new Test()
       );
 
-    expect(mockFn).toHaveBeenCalledTimes(totalMethods);
+    // Call static methods
+    Object.entries(Object.getOwnPropertyDescriptors(Test))
+      .filter(filterMethods)
+      .forEach(([propertyName]: [string, PropertyDescriptor]) =>
+        Test[propertyName]()
+      );
+
+    expect(mockFn).toHaveBeenCalledTimes(totalMockCalls);
   });
 });

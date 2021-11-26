@@ -3,28 +3,38 @@ import { isFunction } from 'lodash';
 
 export type GenericMethod = (...args: any[]) => any;
 
+type Wrapper = (
+  name: string,
+  propertyName: string,
+  method: GenericMethod
+) => GenericMethod;
+
 export class ClassDecoratorHelpers {
-  static wrapAllMethods(
-    target: any,
-    wrapper: (
-      name: string,
-      propertyName: string,
-      method: GenericMethod
-    ) => GenericMethod
-  ) {
-    [
-      ...Object.entries(Object.getOwnPropertyDescriptors(target.prototype)), // Iterate over class methods
-      ...Object.entries(Object.getOwnPropertyDescriptors(target)), // Iterate over static methods
-    ]
-      .filter(
-        ([propertyName, {value}]: [string, any]) =>
-          isFunction(value) && propertyName !== 'constructor'
-      )
+  static wrapAllMethods(target: any, wrapper: Wrapper) {
+    // Wrap class methods
+    new ClassDecoratorHelpers()
+      .applyWrapping(target.prototype, target.name, wrapper) // Class Methods
+      .applyWrapping(target, target.name, wrapper); // Static Methods
+  }
+
+  private applyWrapping(
+    destination: any,
+    name: string,
+    wrapper: Wrapper
+  ): ClassDecoratorHelpers {
+    Object.entries(Object.getOwnPropertyDescriptors(destination))
+      .filter(this.isMethod)
       .forEach(([propertyName, descriptor]: [string, PropertyDescriptor]) =>
-        Object.defineProperty(target.prototype, propertyName, {
+        Object.defineProperty(destination, propertyName, {
           ...descriptor,
-          value: wrapper(target.name, propertyName, descriptor.value),
+          value: wrapper(name, propertyName, descriptor.value),
         })
       );
+
+    return this;
+  }
+
+  private isMethod([propertyName, {value}]: [string, any]): boolean {
+    return isFunction(value) && propertyName !== 'constructor';
   }
 }
