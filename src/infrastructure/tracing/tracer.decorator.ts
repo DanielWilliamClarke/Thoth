@@ -32,12 +32,5 @@ export function ThothTraceMethod(
 }
 
 export function ThothTraceClass(target: Function) {
-  ClassDecoratorHelpers.wrapAllMethods(
-    target,
-    (
-      name: string,
-      propertyName: string,
-      method: GenericMethod
-    ): GenericMethod => TraceUtils.wrap(name, propertyName, method)
-  );
+  ClassDecoratorHelpers.wrapAllMethods(target, TraceUtils.wrap);
 }
